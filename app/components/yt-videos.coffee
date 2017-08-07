@@ -22,17 +22,17 @@ export default Ember.Component.extend
       self: c
       videos: []
 
-    resp = yield do ->
-      pr.map resp.items, (channel) ->
-        new pr (resolve) ->
+    resp = yield do =>
+      pr.map resp.items, (channel) =>
+        new pr (resolve) =>
           buildApiRequest 'GET', '/youtube/v3/search',
             maxResults: 5
             part: 'snippet'
             channelId: channel.snippet.resourceId.channelId
             order: 'date'
-          , null, resolve
-
-    resp.forEach (videos) =>
-      videos.items.forEach (v) =>
-        v.timeAgo = moment(v.snippet.publishedAt).fromNow()
-        @get("channels.#{v.snippet.channelId}.videos").pushObject v
+          , null, (response) =>
+            response.items.forEach (v) =>
+              v.timeAgo = moment(v.snippet.publishedAt).fromNow()
+              @get("channels.#{v.snippet.channelId}.videos").pushObject v
+            resolve()
+      .catch console.error
