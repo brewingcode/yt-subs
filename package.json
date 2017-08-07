@@ -12,7 +12,8 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember test"
+    "test": "ember test",
+    "deploy": "ember deploy production --activate true"
   },
   "devDependencies": {
     "bluebird": "^3.5.0",
