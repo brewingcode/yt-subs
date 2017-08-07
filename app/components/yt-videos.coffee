@@ -25,7 +25,7 @@ export default Ember.Component.extend
       pr.map resp.items, (channel) ->
         new pr (resolve) ->
           buildApiRequest 'GET', '/youtube/v3/search',
-            maxResults: 10
+            maxResults: 5
             part: 'snippet'
             channelId: channel.snippet.resourceId.channelId
             order: 'date'
