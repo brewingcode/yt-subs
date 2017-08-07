@@ -14,6 +14,7 @@ export default Ember.Component.extend
         buildApiRequest 'GET', '/youtube/v3/subscriptions',
           mine: true
           part: 'snippet,contentDetails'
+          maxResults: 50
         , null, resolve
 
     @set 'channels', Ember.Object.create()
