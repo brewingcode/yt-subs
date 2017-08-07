@@ -15,7 +15,11 @@ export default Ember.Component.extend
           mine: true
           part: 'snippet,contentDetails'
         , null, resolve
-    @set 'channels', resp.items
+
+    @set 'channels', Ember.Object.create()
+    resp.items.forEach (c) => @set "channels.#{c.snippet.resourceId.channelId}",
+      self: c
+      videos: []
 
     resp = yield do ->
       pr.map resp.items, (channel) ->
@@ -27,8 +31,7 @@ export default Ember.Component.extend
             order: 'date'
           , null, resolve
 
-    @set 'videos', Ember.A()
     resp.forEach (videos) =>
       videos.items.forEach (v) =>
         v.timeAgo = moment(v.snippet.publishedAt).fromNow()
-        @get('videos').pushObject v
+        @get("channels.#{v.snippet.channelId}.videos").pushObject v

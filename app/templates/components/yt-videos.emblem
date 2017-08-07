@@ -1,10 +1,8 @@
-h2 Your subscribed channels
-ul
-  each channels as |c|
-    li
-      a href="https://www.youtube.com/channel/#{c.snippet.resourceId.channelId}" = c.snippet.title
-h2 videos
-ul
-  each videos as |v|
-    li
-      a href="https://www.youtube.com/watch?v=#{v.id.videoId}" #{v.snippet.title} (#{v.timeAgo})
+
+each-in channels as |c channel|
+  h2
+    a href="https://www.youtube.com/channel/#{c}" = channel.self.snippet.title
+  ul
+    each channel.videos as |v|
+      li
+        a href="https://www.youtube.com/watch?v=#{v.id.videoId}" #{v.snippet.title} (#{v.timeAgo})
