@@ -8,7 +8,7 @@ module.exports = function(defaults) {
     // Add options here
     stylusOptions: {
       includePaths: [
-        'bower_components/foundation/stylus'
+        'bower_components/bootstrap-stylus'
       ]
     }
   });

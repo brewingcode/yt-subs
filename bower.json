@@ -2,6 +2,6 @@
   "name": "yt-subs",
   "dependencies": {
     "seiyria-bootstrap-slider": "~6.0.6",
-    "foundation": "git://github.com/akre54/foundation#a958cd3ef43db77d8a5e1696134c4fbf42bf330b"
+    "bootstrap-stylus": "^5.0.7"
   }
 }

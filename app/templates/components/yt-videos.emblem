@@ -1,4 +1,3 @@
-
 h1 Your recent videos (#{videosPerChannel} per channel)
 
 ui-slider value=videosPerChannel min=3 max=20 step=1 focus=false orientation='horizontal' handle='round' tooltip='hide' immediateResponse=true
