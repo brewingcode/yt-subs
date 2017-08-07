@@ -62,8 +62,6 @@
           $('#revoke-access-button').click(function() {
             revokeAccess();
           });
-        }).then(function() {
-
         });
       }
 
@@ -99,6 +97,7 @@
 
       function updateSigninStatus(isSignedIn) {
         setSigninStatus();
+        window.location.reload();
       }
 
       function createResource(properties) {
