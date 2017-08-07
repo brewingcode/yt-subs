@@ -62,6 +62,8 @@
           $('#revoke-access-button').click(function() {
             revokeAccess();
           });
+        }).then(function() {
+
         });
       }
 
@@ -139,31 +141,38 @@
         return params;
       }
 
-      function executeRequest(request) {
-        request.execute(function(response) {
-          console.log(response);
-        });
+      function executeRequest(request, cb) {
+        request.execute(cb);
       }
 
-      function buildApiRequest(requestMethod, path, params, properties) {
-        params = removeEmptyParams(params);
-        var request;
-        if (properties) {
-          var resource = createResource(properties);
-          request = gapi.client.request({
-              'body': resource,
-              'method': requestMethod,
-              'path': path,
-              'params': params
-          });
-        } else {
-          request = gapi.client.request({
-              'method': requestMethod,
-              'path': path,
-              'params': params
-          });
-        }
-        executeRequest(request);
+      function buildApiRequest(requestMethod, path, params, properties, cb) {
+        var ready = setInterval(function() {
+          if (GoogleAuth) {
+            clearInterval(ready);
+          }
+          else {
+            return;
+          }
+
+          params = removeEmptyParams(params);
+          var request;
+          if (properties) {
+            var resource = createResource(properties);
+            request = gapi.client.request({
+                'body': resource,
+                'method': requestMethod,
+                'path': path,
+                'params': params
+            });
+          } else {
+            request = gapi.client.request({
+                'method': requestMethod,
+                'path': path,
+                'params': params
+            });
+          }
+          executeRequest(request, cb);
+        }, 100);
       }
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
