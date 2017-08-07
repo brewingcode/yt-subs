@@ -2,7 +2,7 @@ h2 Your subscribed channels
 div = foo
 div = channels.length
 ul
-  each c in channels
+  each channels as |c|
     div fuck
     div = c
     a href="https://www.youtube.com/channel/#{c.snippet.channelId}" = c.snippet.title
