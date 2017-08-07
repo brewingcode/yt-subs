@@ -4,6 +4,8 @@ import pr from 'npm:bluebird'
 import moment from 'npm:moment'
 
 export default Ember.Component.extend
+  videosPerChannel: 5
+
   init: (args...) ->
     @_super args...
     @get('load').perform()
@@ -26,7 +28,7 @@ export default Ember.Component.extend
       pr.map resp.items, (channel) =>
         new pr (resolve) =>
           buildApiRequest 'GET', '/youtube/v3/search',
-            maxResults: 5
+            maxResults: 20
             part: 'snippet'
             channelId: channel.snippet.resourceId.channelId
             order: 'date'

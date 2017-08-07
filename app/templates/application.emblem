@@ -3,6 +3,4 @@ button#revoke-access-button style="display: none; margin-left: 25px" Revoke acce
 div#auth-status style="display: inline; padding-left: 25px"
 hr
 
-h1 Your recent videos
-
 yt-videos
