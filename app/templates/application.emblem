@@ -1,6 +1,6 @@
-== outlet
-
-button#sign-in-or-out-button style="margin-left: 25px" Sign in
+button#sign-in-or-out-button style="margin-left: 25px" Sign in/Authorize
 button#revoke-access-button style="display: none; margin-left: 25px" Revoke access
 div#auth-status style="display: inline; padding-left: 25px"
 hr
+
+yt-videos
