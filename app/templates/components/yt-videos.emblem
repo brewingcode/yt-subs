@@ -5,5 +5,6 @@ ul
       a href="https://www.youtube.com/channel/#{c.snippet.resourceId.channelId}" = c.snippet.title
 h2 videos
 ul
-  each v in videos
-    li = v.title
+  each videos as |v|
+    li
+      a href="https://www.youtube.com/watch?v=#{v.id.videoId}" #{v.snippet.title} (#{v.timeAgo})
