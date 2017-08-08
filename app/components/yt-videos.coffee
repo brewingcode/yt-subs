@@ -5,8 +5,7 @@ import moment from 'npm:moment'
 import { storageFor } from 'ember-local-storage'
 
 export default Ember.Component.extend
-  videosPerChannel: 5
-  channelOrder: storageFor('channelOrder')
+  settings: storageFor('yt-subs-settings')
   googleApi: Ember.inject.service()
 
   init: (args...) ->
@@ -23,7 +22,7 @@ export default Ember.Component.extend
         , null, resolve
 
     @set 'channels', Ember.Object.create()
-    order = @get('channelOrder.byId')
+    order = @get('settings.order')
 
     resp.items.forEach (c) =>
       id =  c.snippet.resourceId.channelId
@@ -34,7 +33,7 @@ export default Ember.Component.extend
       if order.indexOf(id) is -1
         order.push id
 
-    @set('channelOrder.byId', order)
+    @set('settings.order', order)
 
     resp = yield do =>
       pr.map resp.items, (channel) =>
@@ -58,13 +57,13 @@ export default Ember.Component.extend
     if not @get('channels')
       return Ember.A()
 
-    return @get('channelOrder.byId').filter (id) =>
+    return @get('settings.order').filter (id) =>
       @get("channels.#{id}")?
     .map (id) =>
       return @get("channels.#{id}")
 
   changeRank: task (channelId, val) ->
-    order = @get 'channelOrder.byId'
+    order = @get 'settings.order'
     val = val - 1
     if val < 0
       val = 0
@@ -72,7 +71,7 @@ export default Ember.Component.extend
       val = order.length - 1
     old = order.indexOf channelId
     order.splice val, 0, order.splice(old, 1)[0]
-    @set 'channelOrder.byId', order
+    @set 'settings.order', order
     yield new pr (resolve) =>
       Ember.run.later =>
         @toggleProperty 'orderChanged'

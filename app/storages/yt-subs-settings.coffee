@@ -4,6 +4,7 @@ Storage = StorageObject.extend()
 
 Storage.reopenClass
   initialState: ->
-    byId: []
+    order: []
+    videosPerChannel: 5
 
 export default Storage

@@ -1,7 +1,7 @@
-h1 Your recent videos (#{videosPerChannel} per channel)
+h1 Your recent videos (#{settings.videosPerChannel} per channel)
 
 =ui-slider [
-  value=videosPerChannel min=3 max=20 step=1 focus=false orientation='horizontal'
+  value=settings.videosPerChannel min=3 max=20 step=1 focus=false orientation='horizontal'
   handle='round' tooltip='hide' immediateResponse=true ]
 
 =each sortedChannels as |c index|
@@ -13,7 +13,7 @@ h1 Your recent videos (#{videosPerChannel} per channel)
     a href="https://www.youtube.com/channel/#{c.id}" target='_blank' = c.self.snippet.title
   ul
     =each c.videos as |v index|
-      if (lt index videosPerChannel)
+      if (lt index settings.videosPerChannel)
         li
           a href="https://www.youtube.com/watch?v=#{v.id.videoId}" target='_blank' #{v.snippet.title}
           span.time-ago  (#{v.timeAgo})
