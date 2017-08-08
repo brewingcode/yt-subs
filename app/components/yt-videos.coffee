@@ -44,6 +44,7 @@ export default Ember.Component.extend
             part: 'snippet'
             channelId: channel.snippet.resourceId.channelId
             order: 'date'
+            type: 'video'
           , null, (response) =>
             response.items.forEach (v) =>
               v.timeAgo = moment(v.snippet.publishedAt).fromNow()
