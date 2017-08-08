@@ -55,7 +55,9 @@ export default Ember.Component.extend
     if not @get('channels')
       return Ember.A()
 
-    return @get('channelOrder.byId').map (id, i) =>
+    return @get('channelOrder.byId').filter (id) =>
+      @get("channels.#{id}")
+    .map (id, i) =>
       @set("channels.#{id}.index", i + 1)
       return @get("channels.#{id}")
 
