@@ -25,11 +25,4 @@ The important files:
 * The two APIS used are [subscriptions](https://developers.google.com/youtube/v3/docs/subscriptions/list) and
   [search](https://developers.google.com/youtube/v3/docs/search/list)
 
-To run locally:
-
-```
-npm install
-npm start
-```
-
 [Ember CLI Boilerplate](BOILERPLATE.md)
