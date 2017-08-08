@@ -45,7 +45,6 @@ export default Ember.Service.extend
       ready: true
 
   updateSigninStatus: (isSignedIn) ->
-    console.log 'updateSigninStatus'
     @setSigninStatus(isSignedIn)
 
   createResource: (properties) ->
