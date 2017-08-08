@@ -4,10 +4,10 @@ h1 Your recent videos (#{videosPerChannel} per channel)
   value=videosPerChannel min=3 max=20 step=1 focus=false orientation='horizontal'
   handle='round' tooltip='hide' immediateResponse=true ]
 
-=each sortedChannels as |c|
+=each sortedChannels as |c index|
   h2 id=c.id
     =input [
-      type="text" class='channel-index' value=c.index
+      type="text" class='channel-index' value=(add c.index 1)
       insert-newline=(action 'changeRank' c.id)
       focus-out=(action 'changeRank' c.id) ]
     a href="https://www.youtube.com/channel/#{c.id}" target='_blank' = c.self.snippet.title
