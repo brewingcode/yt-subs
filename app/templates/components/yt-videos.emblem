@@ -5,9 +5,12 @@ h1 Your recent videos (#{videosPerChannel} per channel)
   handle='round' tooltip='hide' immediateResponse=true ]
 
 =each sortedChannels as |c|
-  h2
-    =input class='channel-index' value=c.index
-    a href="https://www.youtube.com/channel/#{c.self.snippet.resourceId.channelId}" = c.self.snippet.title
+  h2 id=c.id
+    =input [
+      type="text" class='channel-index' value=c.index
+      insert-newline=(action 'changeRank' c.id)
+      focus-out=(action 'changeRank' c.id) ]
+    a href="https://www.youtube.com/channel/#{c.id}" = c.self.snippet.title
     span.time-ago  (#{c.timeAgo})
   ul
     =each c.videos as |v index|

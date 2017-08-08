@@ -12,9 +12,6 @@ export default Ember.Component.extend
     @_super args...
     @get('load').perform()
 
-  rank: (id) ->
-    return @get("channelOrder.#{id}") or moment(@get("channels.#{id}.self.snippet.publishedAt")).unix()
-
   load: task ->
     resp = yield do ->
       new pr (resolve) ->
@@ -25,11 +22,19 @@ export default Ember.Component.extend
         , null, resolve
 
     @set 'channels', Ember.Object.create()
-    resp.items.forEach (c) => @set "channels.#{c.snippet.resourceId.channelId}",
-      self: c
-      timeAgo: moment(c.snippet.publishedAt).fromNow()
-      rank: @rank(c.snippet.publishedAt)
-      videos: []
+    order = @get('channelOrder.byId')
+
+    resp.items.forEach (c) =>
+      id =  c.snippet.resourceId.channelId
+      @set "channels.#{id}",
+        self: c
+        id: id
+        timeAgo: moment(c.snippet.publishedAt).fromNow()
+        videos: []
+      if order.indexOf(id) is -1
+        order.push id
+
+    @set('channelOrder.byId', order)
 
     resp = yield do =>
       pr.map resp.items, (channel) =>
@@ -46,22 +51,24 @@ export default Ember.Component.extend
             resolve()
       .catch console.error
 
-  sortedChannels: Ember.computed 'channels.[]', ->
+  sortedChannels: Ember.computed 'channels.[]', 'orderChanged', ->
     if not @get('channels')
       return Ember.A()
 
-    ids = Object.keys @get('channels')
+    return @get('channelOrder.byId').map (id, i) =>
+      @set("channels.#{id}.index", i + 1)
+      return @get("channels.#{id}")
 
-    ids.sort (a,b) =>
-      aRank = @rank(a)
-      bRank = @rank(b)
-      return switch
-        when aRank < bRank then 1
-        when aRank == bRank then 0
-        when aRank > bRank then -1
-
-    return Ember.A ids.map (id, i) =>
-      channel = @get("channels.#{id}")
-      channel.index = i + 1
-      return channel
+  actions:
+    changeRank: (channelId, val) ->
+      order = @get 'channelOrder.byId'
+      val = val - 1
+      if val < 0
+        val = 0
+      if val >= order.length
+        val = order.length - 1
+      old = order.indexOf channelId
+      order.splice val, 0, order.splice(old, 1)[0]
+      @set 'channelOrder.byId', order
+      @toggleProperty 'orderChanged'
 
