@@ -53,14 +53,11 @@ export default Ember.Component.extend
 
     @toggleProperty 'orderChanged'
 
-  sortedChannels: Ember.computed 'orderChanged', ->
-    if not @get('channels')
-      return Ember.A()
-
-    return @get('settings.order').filter (id) =>
+  sortedChannels: Ember.computed 'channels.[]', 'orderChanged', ->
+    @get('settings.order').filter (id) =>
       @get("channels.#{id}")?
     .map (id) =>
-      return @get("channels.#{id}")
+      @get("channels.#{id}")
 
   changeRank: task (channelId, val) ->
     order = @get 'settings.order'
@@ -77,4 +74,3 @@ export default Ember.Component.extend
         @toggleProperty 'orderChanged'
         resolve()
   .drop()
-
