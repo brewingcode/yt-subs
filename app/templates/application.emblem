@@ -1,7 +1,13 @@
 .container-fluid
-  .auth-buttons
-    button#sign-in-or-out-button style="margin-left: 25px" Sign in/Authorize
-    button#revoke-access-button style="display: none; margin-left: 25px" Revoke access
-    div#auth-status style="display: inline; padding-left: 25px"
-  hr
-  =yt-videos
+  if googleApi.ready
+    .auth-buttons
+      if googleApi.authorized
+        button click='signOut' Sign out
+        button click='revoke' Revoke access
+        div#auth-status You are currently signed in and have granted access to this app.
+      else
+        button click='signIn' Sign in/Authorize
+        div#auth-status You have not authorized this app or you are signed out.
+      hr
+      if googleApi.authorized
+        =yt-videos

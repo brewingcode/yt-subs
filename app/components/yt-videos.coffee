@@ -52,7 +52,9 @@ export default Ember.Component.extend
             resolve()
       .catch console.error
 
-  sortedChannels: Ember.computed 'channels.[]', 'orderChanged', ->
+    @toggleProperty 'orderChanged'
+
+  sortedChannels: Ember.computed 'orderChanged', ->
     if not @get('channels')
       return Ember.A()
 

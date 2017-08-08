@@ -22,48 +22,38 @@ export default Ember.Service.extend
         .then =>
           @auth = window.gapi.auth2.getAuthInstance()
           # Listen for sign-in state changes.
-          @auth.isSignedIn.listen @updateSigninStatus
+          @auth.isSignedIn.listen => @updateSigninStatus()
           # Handle initial sign-in state. (Determine if user is already signed in.)
-          user = @auth.currentUser.get()
           @setSigninStatus()
-          # Call handleAuthClick function when user clicks on
-          #      "Sign In/Authorize" button.
-          $('#sign-in-or-out-button').click => @handleAuthClick()
-          $('#revoke-access-button').click => @revokeAccess()
 
-  handleAuthClick: ->
-    if @auth.isSignedIn.get()
-      # User is authorized and has clicked 'Sign out' button.
-      @auth.signOut()
-    else
-      # User is not signed in. Start Google auth flow.
-      @auth.signIn()
+  signOut: ->
+    @auth.signOut()
+    @set 'authorized', false
 
-  revokeAccess: ->
+  signIn: ->
+    @auth.signIn().then =>
+      @setSigninStatus()
+
+  revoke: ->
     @auth.disconnect()
+    @set 'authorized', false
 
   setSigninStatus: (isSignedIn) ->
     user = @auth.currentUser.get()
-    isAuthorized = user.hasGrantedScopes @scope
-    if isAuthorized
-      $('#sign-in-or-out-button').html 'Sign out'
-      $('#revoke-access-button').css 'display', 'inline-block'
-      $('#auth-status').html 'You are currently signed in and have granted ' + 'access to this app.'
-    else
-      $('#sign-in-or-out-button').html 'Sign In/Authorize'
-      $('#revoke-access-button').css 'display', 'none'
-      $('#auth-status').html 'You have not authorized this app or you are ' + 'signed out.'
+    @setProperties
+      authorized: user.hasGrantedScopes @scope
+      ready: true
 
   updateSigninStatus: (isSignedIn) ->
-    @setSigninStatus()
-    window.location.reload()
+    console.log 'updateSigninStatus'
+    @setSigninStatus(isSignedIn)
 
   createResource: (properties) ->
     resource = {}
     normalizedProps = properties
     for p of properties
       value = properties[p]
-      if p and p.substr(-2, 2) == '[]'
+      if p and p.substr(-2, 2) is '[]'
         adjustedName = p.replace('[]', '')
         if value
           normalizedProps[adjustedName] = value.split(',')
@@ -76,7 +66,7 @@ export default Ember.Service.extend
         pa = 0
         while pa < propArray.length
           key = propArray[pa]
-          if pa == propArray.length - 1
+          if pa is propArray.length - 1
             ref[key] = normalizedProps[p]
           else
             ref = ref[key] = ref[key] or {}
@@ -85,7 +75,7 @@ export default Ember.Service.extend
 
   removeEmptyParams: (params) ->
     for p of params
-      if !params[p] or params[p] == 'undefined'
+      if !params[p] or params[p] is 'undefined'
         delete params[p]
     params
 
