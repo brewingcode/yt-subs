@@ -7,9 +7,9 @@ h1 Your recent videos (#{videosPerChannel} per channel)
 =each sortedChannels as |c index|
   h2 id=c.id
     =input [
-      type="text" class='channel-index' value=(add c.index 1)
-      insert-newline=(action 'changeRank' c.id)
-      focus-out=(action 'changeRank' c.id) ]
+      type="text" class='channel-index' value=(add index 1)
+      insert-newline=(perform changeRank c.id)
+      focus-out=(perform changeRank c.id) ]
     a href="https://www.youtube.com/channel/#{c.id}" target='_blank' = c.self.snippet.title
   ul
     =each c.videos as |v index|

@@ -63,16 +63,19 @@ export default Ember.Component.extend
     .map (id) =>
       return @get("channels.#{id}")
 
-  actions:
-    changeRank: (channelId, val) ->
-      order = @get 'channelOrder.byId'
-      val = val - 1
-      if val < 0
-        val = 0
-      if val >= order.length
-        val = order.length - 1
-      old = order.indexOf channelId
-      order.splice val, 0, order.splice(old, 1)[0]
-      @set 'channelOrder.byId', order
-      @toggleProperty 'orderChanged'
+  changeRank: task (channelId, val) ->
+    order = @get 'channelOrder.byId'
+    val = val - 1
+    if val < 0
+      val = 0
+    if val >= order.length
+      val = order.length - 1
+    old = order.indexOf channelId
+    order.splice val, 0, order.splice(old, 1)[0]
+    @set 'channelOrder.byId', order
+    yield new pr (resolve) =>
+      Ember.run.later =>
+        @toggleProperty 'orderChanged'
+        resolve()
+  .drop()
 
