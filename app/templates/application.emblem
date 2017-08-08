@@ -4,4 +4,4 @@
     button#revoke-access-button style="display: none; margin-left: 25px" Revoke access
     div#auth-status style="display: inline; padding-left: 25px"
   hr
-  yt-videos
+  =yt-videos

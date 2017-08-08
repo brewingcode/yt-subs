@@ -1,12 +1,14 @@
 h1 Your recent videos (#{videosPerChannel} per channel)
 
-ui-slider value=videosPerChannel min=3 max=20 step=1 focus=false orientation='horizontal' handle='round' tooltip='hide' immediateResponse=true
+=ui-slider [
+  value=videosPerChannel min=3 max=20 step=1 focus=false orientation='horizontal'
+  handle='round' tooltip='hide' immediateResponse=true ]
 
-each-in channels as |c channel|
+=each-in channels as |c channel|
   h2
     a href="https://www.youtube.com/channel/#{c}" = channel.self.snippet.title
   ul
-    each channel.videos as |v index|
+    =each channel.videos as |v index|
       if (lt index videosPerChannel)
         li
           a href="https://www.youtube.com/watch?v=#{v.id.videoId}" #{v.snippet.title} (#{v.timeAgo})
