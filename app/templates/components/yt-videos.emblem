@@ -4,11 +4,14 @@ h1 Your recent videos (#{videosPerChannel} per channel)
   value=videosPerChannel min=3 max=20 step=1 focus=false orientation='horizontal'
   handle='round' tooltip='hide' immediateResponse=true ]
 
-=each-in channels as |c channel|
+=each sortedChannels as |c|
   h2
-    a href="https://www.youtube.com/channel/#{c}" = channel.self.snippet.title
+    =input class='channel-index' value=c.index
+    a href="https://www.youtube.com/channel/#{c.self.snippet.resourceId.channelId}" = c.self.snippet.title
+    span.time-ago  (#{c.timeAgo})
   ul
-    =each channel.videos as |v index|
+    =each c.videos as |v index|
       if (lt index videosPerChannel)
         li
-          a href="https://www.youtube.com/watch?v=#{v.id.videoId}" #{v.snippet.title} (#{v.timeAgo})
+          a href="https://www.youtube.com/watch?v=#{v.id.videoId}" #{v.snippet.title}
+          span.time-ago  (#{v.timeAgo})
