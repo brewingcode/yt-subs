@@ -17,3 +17,7 @@ h1 Your recent videos (#{settings.videosPerChannel} per channel)
         li
           a href="https://www.youtube.com/watch?v=#{v.id.videoId}" target='_blank' #{v.snippet.title}
           span.time-ago  (#{v.timeAgo})
+    =else
+      li No videos found
+=else
+  h2 No subscriptions found
