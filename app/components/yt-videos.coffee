@@ -7,15 +7,16 @@ import { storageFor } from 'ember-local-storage'
 export default Ember.Component.extend
   videosPerChannel: 5
   channelOrder: storageFor('channelOrder')
+  googleApi: Ember.inject.service()
 
   init: (args...) ->
     @_super args...
     @get('load').perform()
 
   load: task ->
-    resp = yield do ->
-      new pr (resolve) ->
-        buildApiRequest 'GET', '/youtube/v3/subscriptions',
+    resp = yield do =>
+      new pr (resolve) =>
+        @get('googleApi').buildApiRequest 'GET', '/youtube/v3/subscriptions',
           mine: true
           part: 'snippet,contentDetails'
           maxResults: 50
@@ -38,7 +39,7 @@ export default Ember.Component.extend
     resp = yield do =>
       pr.map resp.items, (channel) =>
         new pr (resolve) =>
-          buildApiRequest 'GET', '/youtube/v3/search',
+          @get('googleApi').buildApiRequest 'GET', '/youtube/v3/search',
             maxResults: 20
             part: 'snippet'
             channelId: channel.snippet.resourceId.channelId

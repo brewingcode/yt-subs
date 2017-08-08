@@ -44,6 +44,7 @@
     "ember-concurrency": "^0.8.7",
     "ember-data": "~2.14.9",
     "ember-export-application-global": "^2.0.0",
+    "ember-inject-script": "0.0.3",
     "ember-load-initializers": "^1.0.0",
     "ember-local-storage": "^1.4.0",
     "ember-resolver": "^4.0.0",
