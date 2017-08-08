@@ -29,7 +29,6 @@ export default Ember.Component.extend
       @set "channels.#{id}",
         self: c
         id: id
-        timeAgo: moment(c.snippet.publishedAt).fromNow()
         videos: []
       if order.indexOf(id) is -1
         order.push id

@@ -11,7 +11,6 @@ h1 Your recent videos (#{videosPerChannel} per channel)
       insert-newline=(action 'changeRank' c.id)
       focus-out=(action 'changeRank' c.id) ]
     a href="https://www.youtube.com/channel/#{c.id}" = c.self.snippet.title
-    span.time-ago  (#{c.timeAgo})
   ul
     =each c.videos as |v index|
       if (lt index videosPerChannel)
