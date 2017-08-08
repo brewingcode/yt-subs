@@ -10,10 +10,10 @@ h1 Your recent videos (#{videosPerChannel} per channel)
       type="text" class='channel-index' value=c.index
       insert-newline=(action 'changeRank' c.id)
       focus-out=(action 'changeRank' c.id) ]
-    a href="https://www.youtube.com/channel/#{c.id}" = c.self.snippet.title
+    a href="https://www.youtube.com/channel/#{c.id}" target='_blank' = c.self.snippet.title
   ul
     =each c.videos as |v index|
       if (lt index videosPerChannel)
         li
-          a href="https://www.youtube.com/watch?v=#{v.id.videoId}" #{v.snippet.title}
+          a href="https://www.youtube.com/watch?v=#{v.id.videoId}" target='_blank' #{v.snippet.title}
           span.time-ago  (#{v.timeAgo})
