@@ -1,50 +1,24 @@
 # yt-subs
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+A sortable list-view of the most recent videos from your Youtube
+subscriptions. Because I find Youtube's UI annoying to quickly look up recent
+videos for the channels I care about the most.
 
-## Prerequisites
+https://yt.brewingcode.net
 
-You will need the following things properly installed on your computer.
+```
+npm install
+npm start
+```
 
-* [Git](https://git-scm.com/)
-* [Node.js](https://nodejs.org/) (with NPM)
-* [Ember CLI](https://ember-cli.com/)
-* [PhantomJS](http://phantomjs.org/)
+# details
 
-## Installation
+This is an [Ember CLI app](BOILERPLATE.md) with the following main additions:
 
-* `git clone <repository-url>` this repository
-* `cd yt-subs`
-* `npm install`
+* [ember-cli-coffeescript](https://github.com/kimroen/ember-cli-coffeescript) for cleaner and simpler JS
+* [ember-cli-emblem](https://github.com/Vestorly/ember-cli-emblem) for cleaner and simpler HTML
+* [bootstrap-stylus](https://github.com/maxmx/bootstrap-stylus) for cleaner and simpler CSS
+* [ember-inject-script](https://github.com/minutebase/ember-inject-script) for Ember-compatible Google oauth and API calls
+* [ember-cli-deploy](https://github.com/ember-cli-deploy/ember-cli-deploy) (and a bazillion plugins) for deploying to S3
 
-## Running / Development
-
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-
-### Code Generators
-
-Make use of the many generators for code, try `ember help generate` for more details
-
-### Running Tests
-
-* `ember test`
-* `ember test --server`
-
-### Building
-
-* `ember build` (development)
-* `ember build --environment production` (production)
-
-### Deploying
-
-Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-* [ember.js](http://emberjs.com/)
-* [ember-cli](https://ember-cli.com/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+[Ember CLI Boilerplate](BOILERPLATE.md)
