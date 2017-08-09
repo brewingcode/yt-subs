@@ -51,8 +51,6 @@ export default Ember.Component.extend
             resolve()
       .catch console.error
 
-    @toggleProperty 'orderChanged'
-
   sortedChannels: Ember.computed 'channels.[]', 'orderChanged', ->
     @get('settings.order').filter (id) =>
       @get("channels.#{id}")?
