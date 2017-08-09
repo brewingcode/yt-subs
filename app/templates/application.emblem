@@ -1,4 +1,6 @@
 .container-fluid
+  if googleApi.error
+    .alert.alert-danger role='alert' = googleApi.error
   if googleApi.ready
     .auth-buttons
       if googleApi.authorized

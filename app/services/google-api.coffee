@@ -8,24 +8,31 @@ export default Ember.Service.extend
   init: (args...) ->
     @_super args...
     injectScript('https://apis.google.com/js/api.js').then =>
-      window.gapi.load 'client:auth2', =>
-        # Retrieve the discovery document for version 3 of YouTube Data API.
-        # In practice, your app can retrieve one or more discovery documents.
-        discoveryUrl = 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'
-        # Initialize the gapi.client object, which app uses to make API requests.
-        # Get API key and client ID from API Console.
-        # 'scope' field specifies space-delimited list of access scopes.
-        window.gapi.client.init
-          apiKey: 'AIzaSyCOzVWc5epKJ0kf5QSUNtZCx9diYwTDt68'
-          discoveryDocs: [ discoveryUrl ]
-          clientId: '26306428056-qfc1r2rsamlosjl6lvf2h0hf2oepg7hh.apps.googleusercontent.com'
-          scope: @scope
-        .then =>
-          @auth = window.gapi.auth2.getAuthInstance()
-          # Listen for sign-in state changes.
-          @auth.isSignedIn.listen => @updateSigninStatus()
-          # Handle initial sign-in state. (Determine if user is already signed in.)
-          @setSigninStatus()
+      window.gapi.load 'client:auth2',
+        callback: =>
+          # Retrieve the discovery document for version 3 of YouTube Data API.
+          # In practice, your app can retrieve one or more discovery documents.
+          discoveryUrl = 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'
+          # Initialize the gapi.client object, which app uses to make API requests.
+          # Get API key and client ID from API Console.
+          # 'scope' field specifies space-delimited list of access scopes.
+          window.gapi.client.init
+            apiKey: 'AIzaSyCOzVWc5epKJ0kf5QSUNtZCx9diYwTDt68'
+            discoveryDocs: [ discoveryUrl ]
+            clientId: '26306428056-qfc1r2rsamlosjl6lvf2h0hf2oepg7hh.apps.googleusercontent.com'
+            scope: @scope
+          .then =>
+            @auth = window.gapi.auth2.getAuthInstance()
+            # Listen for sign-in state changes.
+            @auth.isSignedIn.listen => @updateSigninStatus()
+            # Handle initial sign-in state. (Determine if user is already signed in.)
+            @setSigninStatus()
+          , (err) =>
+            console.error 'gapi init error: ', err
+            @set 'error', "Google API failed to initialize: #{err.details}"
+        onerror: =>
+          console.error 'gapi error'
+          @set 'error', 'Google API failed to load'
 
   signOut: ->
     @auth.signOut()
