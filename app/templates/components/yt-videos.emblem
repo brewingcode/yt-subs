@@ -4,6 +4,13 @@ h1 Your recent videos (#{settings.videosPerChannel} per channel)
   value=settings.videosPerChannel min=3 max=20 step=1 focus=false orientation='horizontal'
   handle='round' tooltip='hide' immediateResponse=true ]
 
+div
+  span Mark recent videos (those that are less than
+  =input [
+    type="text" value=settings.recent class='recent-hours'
+    key-up=(perform changeRecent) ]
+  span  hours old)
+
 =each sortedChannels as |c index|
   h2 id=c.id
     =input [
@@ -15,8 +22,9 @@ h1 Your recent videos (#{settings.videosPerChannel} per channel)
     =each c.videos as |v index|
       if (lt index settings.videosPerChannel)
         li
-          a href="https://www.youtube.com/watch?v=#{v.id.videoId}" target='_blank' #{v.snippet.title}
-          span.time-ago  (#{v.timeAgo})
+          span class=v.recent:recent
+            a href="https://www.youtube.com/watch?v=#{v.id.videoId}" target='_blank' #{v.snippet.title}
+            span.time-ago  (#{v.timeAgo})
     =else
       li No videos found
 =else

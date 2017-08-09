@@ -6,5 +6,6 @@ Storage.reopenClass
   initialState: ->
     order: []
     videosPerChannel: 5
+    recent: 6
 
 export default Storage

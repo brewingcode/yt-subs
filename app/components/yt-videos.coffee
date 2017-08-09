@@ -17,6 +17,10 @@ export default Ember.Component.extend
     @_super args...
     @get('load').perform()
 
+  isRecent: (m) ->
+    m = m.clone()
+    m.add(@get('settings.recent'), 'hours').isAfter()
+
   load: task ->
     resp = yield do =>
       @get('googleApi').buildApiRequest 'GET', '/youtube/v3/subscriptions',
@@ -51,7 +55,9 @@ export default Ember.Component.extend
         , null
         .then (response) =>
           response.items.forEach (v) =>
-            v.timeAgo = moment(v.snippet.publishedAt).fromNow()
+            v.time = moment(v.snippet.publishedAt)
+            v.timeAgo = v.time.fromNow()
+            v.recent = @isRecent(v.time)
             @get("channels.#{v.snippet.channelId}.videos").pushObject v
       .catch console.error
 
@@ -90,3 +96,12 @@ export default Ember.Component.extend
     yield @videosUpdated ->
       Ember.run.later this, -> $('#'+channelId+' input').focus()
   .drop()
+
+  changeRecent: task (val) ->
+    for _, c of @get('channels')
+      if videos = Ember.get(c, 'videos')
+        for v in videos
+          Ember.set(v, 'recent', @isRecent(v.time))
+    yield @videosUpdated -> 0
+  .drop()
+
