@@ -50,7 +50,7 @@ export default Ember.Service.extend
     user = @auth.currentUser.get()
     @setProperties
       authorized: user.hasGrantedScopes @scope
-      email: user.getBasicProfile().getEmail()
+      email: user?.getBasicProfile()?.getEmail()
       ready: true
 
   updateSigninStatus: (isSignedIn) ->
