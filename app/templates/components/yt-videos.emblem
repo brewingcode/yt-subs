@@ -8,7 +8,7 @@ div
   span
     ' Mark recent videos (those that are less than
   =input [
-    type="text" value=settings.recent class='recent-hours'
+    type="tel" value=settings.recent class='recent-hours'
     key-up=(perform changeRecent) ]
   span  hours old)
 
