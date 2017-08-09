@@ -3,6 +3,11 @@ import { task } from 'ember-concurrency'
 import pr from 'npm:bluebird'
 import moment from 'npm:moment'
 import { storageFor } from 'ember-local-storage'
+import config from '../config/environment'
+
+log = (args...) ->
+  if config.environment isnt 'production'
+    console.log args...
 
 export default Ember.Component.extend
   settings: storageFor('yt-subs-settings')
@@ -58,6 +63,11 @@ export default Ember.Component.extend
       @get("channels.#{id}")
 
   changeRank: task (channelId, val) ->
+    log 'changeRank:', @get("channels.#{channelId}.self.snippet.title"), val
+    if not val
+      log 'no val, abort change'
+      return
+
     order = @get 'settings.order'
     val = val - 1
     if val < 0
@@ -65,6 +75,10 @@ export default Ember.Component.extend
     if val >= order.length
       val = order.length - 1
     old = order.indexOf channelId
+    if val is old
+      log 'no change, abort change'
+      return
+
     order.splice val, 0, order.splice(old, 1)[0]
     @set 'settings.order', order
     yield new pr (resolve) =>
