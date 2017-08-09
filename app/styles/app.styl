@@ -4,28 +4,25 @@ a:visited
   color: #551A8B !important
 
 .container-fluid
-  padding-top: 15px
+  padding-top: ($grid-gutter-width / 2)
 
 .auth-buttons
-  button
-    margin-left: 25px
-  #auth-status
-    display: inline
-    padding-left: 25px
+  button, #auth-status
+    margin-left: ($grid-gutter-width / 2)
 
 .ui-slider
   @media (min-width: $screen-xs-min)
     width: 30em
 
 .time-ago
-  font-size: 80%
+  font-size: 90%
 
 .channel-index
   width: 3ex
-  margin-right: 1ex
 
 .recent-hours
-  width: 3ex
+  width: 3em
+  text-align: center
 
 .recent
   background-color: $alert-success-bg

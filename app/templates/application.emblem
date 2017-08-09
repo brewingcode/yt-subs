@@ -6,10 +6,10 @@
       if googleApi.authorized
         button click='signOut' Sign out
         button click='revoke' Revoke access
-        div#auth-status You are currently signed in as #{googleApi.email}
+        span#auth-status You are currently signed in as #{googleApi.email}
       else
         button click='signIn' Sign in/Authorize
-        div#auth-status You have not authorized this app or you are signed out.
+        span#auth-status You have not authorized this app or you are signed out.
       hr
       if googleApi.authorized
         =yt-videos

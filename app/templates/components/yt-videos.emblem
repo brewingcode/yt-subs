@@ -5,7 +5,8 @@ h1 Your recent videos (#{settings.videosPerChannel} per channel)
   handle='round' tooltip='hide' immediateResponse=true ]
 
 div
-  span Mark recent videos (those that are less than
+  span
+    ' Mark recent videos (those that are less than
   =input [
     type="text" value=settings.recent class='recent-hours'
     key-up=(perform changeRecent) ]
@@ -17,7 +18,7 @@ div
       type="text" class='channel-index' value=(add index 1)
       insert-newline=(perform changeRank c.id)
       focus-out=(perform changeRank c.id) ]
-    a href="https://www.youtube.com/channel/#{c.id}" target='_blank' = c.self.snippet.title
+    a href="https://www.youtube.com/channel/#{c.id}" target='_blank'  #{c.self.snippet.title}
   ul
     =each c.videos as |v index|
       if (lt index settings.videosPerChannel)
