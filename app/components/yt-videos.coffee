@@ -30,7 +30,7 @@ export default Ember.Component.extend
       , null
 
     @set 'channels', Ember.Object.create()
-    order = @get('settings.order')
+    order = @get 'settings.order'
     log "loaded #{order.length} channels from settings.order: ", order
 
     resp.items.forEach (c) =>
@@ -42,7 +42,7 @@ export default Ember.Component.extend
       if order.indexOf(id) is -1
         order.push id
 
-    @set('settings.order', order)
+    @set 'settings.order', order
 
     resp = yield do =>
       pr.map resp.items, (channel) =>
@@ -55,9 +55,9 @@ export default Ember.Component.extend
         , null
         .then (response) =>
           response.items.forEach (v) =>
-            v.time = moment(v.snippet.publishedAt)
+            v.time = moment v.snippet.publishedAt
             v.timeAgo = v.time.fromNow()
-            v.recent = @isRecent(v.time)
+            v.recent = @isRecent v.time
             @get("channels.#{v.snippet.channelId}.videos").pushObject v
       .catch console.error
 
@@ -65,7 +65,7 @@ export default Ember.Component.extend
     @get('settings.order').filter (id) =>
       @get("channels.#{id}")?
     .map (id) =>
-      @get("channels.#{id}")
+      @get "channels.#{id}"
 
   videosUpdated: (cb) ->
     new pr (resolve) =>
@@ -93,15 +93,14 @@ export default Ember.Component.extend
 
     order.splice val, 0, order.splice(old, 1)[0]
     @set 'settings.order', order
-    yield @videosUpdated ->
+    yield @videosUpdated =>
       Ember.run.later this, -> $('#'+channelId+' input').focus()
   .drop()
 
   changeRecent: task (val) ->
-    for _, c of @get('channels')
-      if videos = Ember.get(c, 'videos')
+    for _, c of @get 'channels'
+      if videos = Ember.get c, 'videos'
         for v in videos
-          Ember.set(v, 'recent', @isRecent(v.time))
+          Ember.set v, 'recent', @isRecent(v.time)
     yield @videosUpdated -> 0
   .drop()
-
