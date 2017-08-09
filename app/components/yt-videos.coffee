@@ -61,6 +61,13 @@ export default Ember.Component.extend
     .map (id) =>
       @get("channels.#{id}")
 
+  videosUpdated: (cb) ->
+    new pr (resolve) =>
+      Ember.run.later this, ->
+        @toggleProperty 'orderChanged'
+        resolve()
+    .then cb
+
   changeRank: task (channelId, val) ->
     log 'changeRank:', @get("channels.#{channelId}.self.snippet.title"), val
     if not val
@@ -80,10 +87,6 @@ export default Ember.Component.extend
 
     order.splice val, 0, order.splice(old, 1)[0]
     @set 'settings.order', order
-    yield new pr (resolve) =>
-      Ember.run.later this, ->
-        @toggleProperty 'orderChanged'
-        resolve()
-    .then =>
+    yield @videosUpdated ->
       Ember.run.later this, -> $('#'+channelId+' input').focus()
   .drop()
