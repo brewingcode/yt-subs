@@ -27,6 +27,7 @@ export default Ember.Component.extend
 
     @set 'channels', Ember.Object.create()
     order = @get('settings.order')
+    log "loaded #{order.length} channels from settings.order: ", order
 
     resp.items.forEach (c) =>
       id =  c.snippet.resourceId.channelId
