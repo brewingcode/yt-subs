@@ -19,12 +19,11 @@ export default Ember.Component.extend
 
   load: task ->
     resp = yield do =>
-      new pr (resolve) =>
-        @get('googleApi').buildApiRequest 'GET', '/youtube/v3/subscriptions',
-          mine: true
-          part: 'snippet,contentDetails'
-          maxResults: 50
-        , null, resolve
+      @get('googleApi').buildApiRequest 'GET', '/youtube/v3/subscriptions',
+        mine: true
+        part: 'snippet,contentDetails'
+        maxResults: 50
+      , null
 
     @set 'channels', Ember.Object.create()
     order = @get('settings.order')
@@ -42,18 +41,17 @@ export default Ember.Component.extend
 
     resp = yield do =>
       pr.map resp.items, (channel) =>
-        new pr (resolve) =>
-          @get('googleApi').buildApiRequest 'GET', '/youtube/v3/search',
-            maxResults: 20
-            part: 'snippet'
-            channelId: channel.snippet.resourceId.channelId
-            order: 'date'
-            type: 'video'
-          , null, (response) =>
-            response.items.forEach (v) =>
-              v.timeAgo = moment(v.snippet.publishedAt).fromNow()
-              @get("channels.#{v.snippet.channelId}.videos").pushObject v
-            resolve()
+        @get('googleApi').buildApiRequest 'GET', '/youtube/v3/search',
+          maxResults: 20
+          part: 'snippet'
+          channelId: channel.snippet.resourceId.channelId
+          order: 'date'
+          type: 'video'
+        , null
+        .then (response) =>
+          response.items.forEach (v) =>
+            v.timeAgo = moment(v.snippet.publishedAt).fromNow()
+            @get("channels.#{v.snippet.channelId}.videos").pushObject v
       .catch console.error
 
   sortedChannels: Ember.computed 'channels.[]', 'orderChanged', ->

@@ -1,5 +1,6 @@
 import Ember from 'ember'
 import injectScript from 'ember-inject-script'
+import pr from 'npm:bluebird'
 
 export default Ember.Service.extend
   scope: 'https://www.googleapis.com/auth/youtube.readonly'
@@ -78,18 +79,9 @@ export default Ember.Service.extend
         delete params[p]
     params
 
-  executeRequest: (request, cb) ->
-    request.execute cb
-
-  buildApiRequest: (requestMethod, path, params, properties, cb) ->
-    ready = setInterval =>
-      if @auth
-        clearInterval ready
-      else
-        return
-
+  buildApiRequest: (requestMethod, path, params, properties) ->
+    new pr (resolve) =>
       params = @removeEmptyParams(params)
-      request = undefined
       if properties
         resource = @createResource(properties)
         request = window.gapi.client.request(
@@ -102,5 +94,4 @@ export default Ember.Service.extend
           'method': requestMethod
           'path': path
           'params': params)
-      @executeRequest request, cb
-    , 100
+      request.execute resolve
