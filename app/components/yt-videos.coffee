@@ -82,7 +82,9 @@ export default Ember.Component.extend
     order.splice val, 0, order.splice(old, 1)[0]
     @set 'settings.order', order
     yield new pr (resolve) =>
-      Ember.run.later =>
+      Ember.run.later this, ->
         @toggleProperty 'orderChanged'
         resolve()
+    .then =>
+      Ember.run.later this, -> $('#'+channelId+' input').focus()
   .drop()
