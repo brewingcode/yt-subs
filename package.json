@@ -1,0 +1,14 @@
+{
+  "name": "YourTube",
+  "version": "1.0.0",
+  "description": "Alternative view for your YouTube",
+  "author": "Alex",
+  "private": true,
+  "dependencies": {
+    "pug-pack": "^1.9.2"
+  },
+  "scripts": {
+    "dev": "pug-pack --watch",
+    "build": "pug-pack --production"
+  }
+}
