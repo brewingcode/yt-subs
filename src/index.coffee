@@ -7,7 +7,7 @@ app = new Vue
     channels: []
     order: []
     headers: [
-      { value: 'index', text: 'Order' }
+      { value: 'index', text: 'Order', sort: @sortIndex }
       { value: 'title', text: 'Channel Name' }
       { value: 'totalItemCount', text: 'Item Count' }
     ]
@@ -35,7 +35,7 @@ app = new Vue
         return {
           ..._.pick item.snippet, ['title', 'publishedAt']
           ..._.pick item.contentDetails, ['totalItemCount', 'newItemCount']
-          index
+          index: index + 1
           channelId
         }
 
@@ -46,4 +46,17 @@ app = new Vue
 
     writeStorage: ->
       localStorage.setItem 'yt-subs', JSON.stringify
-        order: @order
+        order: _.sortBy(@channels, 'index').map (c) -> c.channelId
+
+    sortIndex: (a, b) ->
+      if +a < +b
+        -1
+      else if +a > +b
+        1
+      else
+        0
+
+    setIndex: _.debounce (item, newIndex) ->
+      item.index = newIndex
+      app.writeStorage()
+    , 500

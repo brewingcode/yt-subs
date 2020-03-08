@@ -31,6 +31,8 @@ html
                      :sort-by="['index']"
                      :items-per-page="-1"
                      hide-default-footer)
+          template(v-slot:item.index="{item}")
+            v-text-field(dense @input="setIndex(item, $event)" :value="item.index")
 
     :inject(file="gapi.js")
     :inject(file="vue-dev.js")
