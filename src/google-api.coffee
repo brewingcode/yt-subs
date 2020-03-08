@@ -15,15 +15,13 @@ window.goog =
         # Get API key and client ID from API Console.
         # 'scope' field specifies space-delimited list of access scopes.
         window.gapi.client.init
-          apiKey: 'AIzaSyCOzVWc5epKJ0kf5QSUNtZCx9diYwTDt68'
           discoveryDocs: [ discoveryUrl ]
-          clientId: '26306428056-qfc1r2rsamlosjl6lvf2h0hf2oepg7hh.apps.googleusercontent.com'
+          clientId: '11548176621-dneqrbb90krp9nl010cfib18uelggre4.apps.googleusercontent.com'
           scope: @scope
         .then =>
           @auth = window.gapi.auth2.getAuthInstance()
           # Listen for sign-in state changes.
           @auth.isSignedIn.listen => @updateSigninStatus()
-          # Handle initial sign-in state. (Determine if user is already signed in.)
           @setSigninStatus()
         , (err) =>
           console.error 'gapi init error: ', err
@@ -38,7 +36,7 @@ window.goog =
       @authorized = false
 
     signIn: ->
-      @auth.signIn().then =>
+      @auth?.signIn().then =>
         @setSigninStatus()
 
     revoke: ->
@@ -49,6 +47,8 @@ window.goog =
       user = @auth.currentUser.get()
       @authorized = user?.hasGrantedScopes @scope
       @email = user?.getBasicProfile()?.getEmail()
+      if @email
+        @getChannels()
 
     updateSigninStatus: (isSignedIn) ->
       @setSigninStatus(isSignedIn)
@@ -84,20 +84,17 @@ window.goog =
           delete params[p]
       params
 
-    # async
     buildApiRequest: (requestMethod, path, params, properties) ->
       params = @removeEmptyParams(params)
       if properties
         resource = @createResource(properties)
-        request = window.gapi.client.request(
+        window.gapi.client.request(
           'body': resource
           'method': requestMethod
           'path': path
           'params': params)
       else
-        request = window.gapi.client.request(
+        window.gapi.client.request(
           'method': requestMethod
           'path': path
           'params': params)
-      
-      await request.execute()

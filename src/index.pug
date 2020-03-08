@@ -10,16 +10,20 @@ html
     script()
   body
     script#app(type="text/x-template"): v-app: v-container(fluid)
-      v-row: v-col
+
+      v-row(v-if="auth"): v-col
         template(v-if="authorized")
           v-btn(@click="signOut") Sign out
           v-btn(@click="revoke") De-authorize
           span &nbsp;You are currently signed in as {{ email }}
         template(v-else)
           v-btn(@click="signIn") Sign In/Re-authorize
+
       v-row(v-if="gerror"): v-col
         v-alert(type="danger") {{ gerror}}
-      
+
+      v-row(v-if="channels.length"): v-col
+        v-card(v-for="c in channels") {{ c }}
 
     :inject(file="gapi.js")
     :inject(file="vue-dev.js")
