@@ -84,17 +84,21 @@ window.goog =
           delete params[p]
       params
 
-    buildApiRequest: (requestMethod, path, params, properties) ->
+    # async
+    apiRequest: (requestMethod, path, params, properties) ->
       params = @removeEmptyParams(params)
       if properties
         resource = @createResource(properties)
-        window.gapi.client.request(
+        req = window.gapi.client.request(
           'body': resource
           'method': requestMethod
           'path': path
           'params': params)
       else
-        window.gapi.client.request(
+        req = window.gapi.client.request(
           'method': requestMethod
           'path': path
           'params': params)
+
+      new Promise (resolve) ->
+        req.execute(resolve)

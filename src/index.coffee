@@ -15,9 +15,8 @@ app = new Vue
 
   methods:
     getChannels: ->
-      req = @buildApiRequest 'GET', '/youtube/v3/subscriptions',
+      resp = await @apiRequest 'GET', '/youtube/v3/subscriptions',
         mine: true
         part: 'snippet,contentDetails'
         maxResults: 50
-      req.execute (resp) =>
-        @channels = resp.items
+      @channels = resp.items
