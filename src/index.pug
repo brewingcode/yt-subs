@@ -30,6 +30,7 @@ html
                      :items="channels"
                      :sort-by="['index']"
                      :items-per-page="-1"
+                     must-sort
                      hide-default-footer)
           template(v-slot:item.index="{item}")
             v-text-field(dense @input="setIndex(item, $event)" :value="item.index")
