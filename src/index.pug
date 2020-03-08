@@ -7,7 +7,8 @@ html
     meta(name="viewport" content="width=device-width, initial-scale=1")
     :inject(file="md-icons.css")
     :inject(file="vuetify.css")
-    script()
+    style.
+      .index input { text-align: right }
   body
     script#app(type="text/x-template"): v-app: v-container(fluid)
 
@@ -33,7 +34,7 @@ html
                      must-sort
                      hide-default-footer)
           template(v-slot:item.index="{item}")
-            v-text-field(dense @input="setIndex(item, $event)" :value="item.index")
+            v-text-field.index(dense @input="setIndex(item, $event)" :value="item.index")
 
     :inject(file="gapi.js")
     :inject(file="vue-dev.js")

@@ -7,7 +7,7 @@ app = new Vue
     channels: []
     order: []
     headers: [
-      { value: 'index', text: 'Order', sort: @sortIndex }
+      { value: 'index', text: 'Order', sort: @sortIndex, width: 5 }
       { value: 'title', text: 'Channel Name' }
       { value: 'totalItemCount', text: 'Item Count' }
     ]
@@ -57,6 +57,7 @@ app = new Vue
         0
 
     setIndex: _.debounce (item, newIndex) ->
-      item.index = newIndex
-      app.writeStorage()
+      if newIndex
+        item.index = newIndex
+        app.writeStorage()
     , 500
