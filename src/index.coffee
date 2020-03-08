@@ -28,13 +28,15 @@ app = new Vue
         maxResults: 50
 
       @channels = resp.items.map (item, index) =>
+        channelId = item.snippet.resourceId.channelId # NOT item.snippet.channelId
         if @order.length
-          index = @order.indexOf(item.snippet.channelId)
+          index = @order.indexOf(channelId)
           index = if index >= 0 then index else resp.items.length
         return {
-          ..._.pick item.snippet, ['title', 'publishedAt', 'channelId']
+          ..._.pick item.snippet, ['title', 'publishedAt']
           ..._.pick item.contentDetails, ['totalItemCount', 'newItemCount']
           index
+          channelId
         }
 
     readStorage: ->
