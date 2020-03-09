@@ -256,7 +256,7 @@
   exports.YouTubePlayer = YouTubePlayer;
   exports.getIdFromURL = getIdFromURL;
   exports.getTimeFromURL = getTimeFromURL;
-  exports.default = index;
+  exports.install = index.install;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
