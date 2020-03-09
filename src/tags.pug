@@ -29,21 +29,21 @@ html
         channel(v-if="channels.length"
                 v-for="c in channels"
                 :key="c.channelId"
-                :channelId="c.channelId")
+                :channel="c")
 
     script#channel(type="text/x-template")
       v-row(dense align-content="start")
         v-col(cols="12" sm="4")
           v-row(dense align-content="center")
             v-col(cols="8")
-              a(:href="'https://youtube.com/channel/' + channelId" target="_blank") {{ title }}
+              a(:href="'https://youtube.com/channel/' + channel.channelId" target="_blank") {{ channel.title }}
             v-col(cols="4")
               v-text-field(style="width:12ex"
                            v-model="newTag"
                            @keydown.enter="addTag"
                            prepend-inner-icon="mdi-plus-circle")
         v-col(cols="12" sm="8")
-          v-chip(pill v-for="t in tags" :key="t") {{ t }}
+          v-chip(v-for="t in $root.tags[channel.channelId]" :key="t") {{ t }}
 
     :inject(file="gapi.js")
     :inject(file="vue-dev.js")

@@ -1,21 +1,13 @@
 Vue.component 'channel',
   template: '#channel'
   props: [
-    'channelId'
+    'channel'
   ]
   data: ->
-    title: ''
-    tags: []
     newTag: ''
-  created: ->
-    @title = @$root.channels
-      .find (c) => c.channelId is @channelId
-      .title
-    @tags = @$root.tags[@channelId]
   methods:
-    addTag: (t) ->
-      @$root.tags[@channelId].push @newTag
-      @$root.writeStorage()
+    addTag: ->
+      @$root.addTag(@channel.channelId, @newTag)
       @newTag = ''
 
 app = new Vue
@@ -56,3 +48,8 @@ app = new Vue
     writeStorage: ->
       localStorage.setItem 'yt-subs', JSON.stringify
         tags: @tags
+
+    addTag: (channelId, newTag) ->
+      if not @tags[channelId].find (t) -> t is newTag
+        @tags[channelId].push newTag
+      @writeStorage()
