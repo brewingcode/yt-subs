@@ -23,7 +23,10 @@ html
       v-container(fluid v-if="gerror")
         v-alert(type="danger") {{ gerror}}
 
-      v-container(fluid v-if="channels.length")
+      v-container(fluid v-if="viewTag")
+        videos(:tag="viewTag")
+
+      v-container(fluid v-else-if="channels.length")
         v-alert(type="success") {{ channels.length }} channels found
 
         channel(v-if="channels.length"
@@ -44,7 +47,13 @@ html
                              prepend-inner-icon="mdi-plus-circle"
                              dense)
         v-col(cols="12" sm="8")
-          v-chip(v-for="t in $root.tags[channel.channelId]" :key="t") {{ t }}
+          v-chip(v-for="t in $root.tags[channel.channelId]"
+                 :key="t"
+                 @click="$root.viewTag = t"
+                 v-text="t")
+
+    script#videos(type="text/x-template")
+      span videos for {{ tag }}
 
     :inject(file="gapi.js")
     :inject(file="vue-dev.js")
