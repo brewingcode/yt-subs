@@ -84,7 +84,7 @@ window.goog =
           delete params[p]
       params
 
-    # async
+    # returns promise
     apiRequest: (requestMethod, path, params, properties) ->
       params = @removeEmptyParams(params)
       if properties

@@ -1,11 +1,4 @@
-getVideosInChannel = _.throttle (channelId, count) ->
-  await @$root.apiRequest 'GET', '/youtube/v3/search',
-    maxResults: @count or 20
-    part: 'snippet'
-    channelId: @channelId
-    order: 'date'
-    type: 'video'
-, 10000
+Vue.use(VueYouTubeEmbed)
 
 Vue.component 'video-list',
   template: '#video-list'
@@ -14,10 +7,37 @@ Vue.component 'video-list',
 
   data: ->
     videos: []
-    watched: {}
 
   mounted: ->
-    @videos = await getVideosInChannel @channelId, @count
+    resp = await @$root.apiRequest 'GET', "/youtube/v3/activities?channelId=#{@channelId}",
+      maxResults: 50
+      part: 'snippet,contentDetails'
+    @videos = resp.items
+      .filter (a) -> a.snippet.type is 'upload'
+      .map (a) ->
+        return {
+          ..._.pick a.snippet, ['publishedAt', 'title']
+          videoId: a.contentDetails.upload.videoId
+          showing: false
+        }
+
+    @filterVideos()
+
+  filters:
+    dateNice: (d) -> moment(d).format('ddd MMM D h:mma')
+    dateHuman: (d) -> moment(d).fromNow()
+
+  methods:
+    filterVideos: ->
+      @videos = @videos
+        .filter (v) => not @$root.watched[v.videoId]
+        .slice 0, @count or 5
+
+    markWatched: (video) ->
+      video.showing = false
+      @$root.watched[video.videoId] = 1
+      @$root.writeStorage()
+      @filterVideos()
 
 app = new Vue
   el: '#app'
@@ -27,6 +47,7 @@ app = new Vue
   data: ->
     channels: []
     order: []
+    watched: {}
     headers: [
       { value: 'index', text: 'Order', sort: @sortIndex, width: 5 }
       { value: 'title', text: 'Channel Name' }
@@ -63,10 +84,12 @@ app = new Vue
       try
         state = JSON.parse localStorage.getItem 'yt-subs'
         @order = state.order if state.order
+        @watched = state.watched if _.size(state.watched)
 
     writeStorage: ->
       localStorage.setItem 'yt-subs', JSON.stringify
         order: _.sortBy(@channels, 'index').map (c) -> c.channelId
+        watched: @watched
 
     sortIndex: (a, b) ->
       if +a < +b

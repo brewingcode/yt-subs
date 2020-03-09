@@ -39,19 +39,29 @@ html
             video-list(:channelId="item.channelId")
 
     script#video-list(type="text/x-template")
-      v-simple-table(fixed-header)
+      v-simple-table(fixed-header dense)
         template(v-slot:default)
           thead
             tr
               th Published
-              th Length
+              th Title
           tbody
             tr(v-for="v in videos")
-              td {{ v }}
+              td {{ v.publishedAt | dateNice }} ({{ v.publishedAt | dateHuman }})
+              td
+                a(@click.stop="v.showing = true") {{ v.title }}
+                v-dialog(v-model="v.showing" width="50%")
+                  div(style="text-align:center")
+                    youtube(:video-id="v.videoId")
+                    div
+                      v-btn(@click="markWatched(v)") Mark as Watched
+                      v-btn(@click="v.showing = false") Close
 
     :inject(file="gapi.js")
     :inject(file="vue-dev.js")
     :inject(file="vuetify.js")
     :inject(file="google-api.coffee")
     :inject(file="lodash.js")
+    :inject(file="vue-youtube-embed.js")
+    :inject(file="moment.js")
     :inject(file="index.coffee" bare)
