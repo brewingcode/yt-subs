@@ -24,7 +24,7 @@ app = new Vue
     getChannels: ->
       resp = await @apiRequest 'GET', '/youtube/v3/subscriptions',
         mine: true
-        part: 'snippet,contentDetails'
+        part: 'snippet'
         maxResults: 50
 
       @channels = resp.items.map (item, index) =>
@@ -34,7 +34,6 @@ app = new Vue
           index = if index >= 0 then index else resp.items.length
         return {
           ..._.pick item.snippet, ['title', 'publishedAt']
-          ..._.pick item.contentDetails, ['totalItemCount', 'newItemCount']
           index: index + 1
           channelId
         }
