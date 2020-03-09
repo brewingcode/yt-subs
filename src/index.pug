@@ -35,6 +35,19 @@ html
                      hide-default-footer)
           template(v-slot:item.index="{item}")
             v-text-field.index(dense @input="setIndex(item, $event)" :value="item.index")
+          template(v-slot:item.videos="{item}")
+            video-list(:channelId="item.channelId")
+
+    script#video-list(type="text/x-template")
+      v-simple-table(fixed-header)
+        template(v-slot:default)
+          thead
+            tr
+              th Published
+              th Length
+          tbody
+            tr(v-for="v in videos")
+              td {{ v }}
 
     :inject(file="gapi.js")
     :inject(file="vue-dev.js")

@@ -16,7 +16,7 @@ window.goog =
         # 'scope' field specifies space-delimited list of access scopes.
         window.gapi.client.init
           discoveryDocs: [ discoveryUrl ]
-          clientId: '11548176621-dneqrbb90krp9nl010cfib18uelggre4.apps.googleusercontent.com'
+          clientId: '665598157747-uq4f1c2q8760qk9bicmt45qptlkcefej.apps.googleusercontent.com'
           scope: @scope
         .then =>
           @auth = window.gapi.auth2.getAuthInstance()

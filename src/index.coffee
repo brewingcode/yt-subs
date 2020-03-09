@@ -1,3 +1,24 @@
+getVideosInChannel = _.throttle (channelId, count) ->
+  await @$root.apiRequest 'GET', '/youtube/v3/search',
+    maxResults: @count or 20
+    part: 'snippet'
+    channelId: @channelId
+    order: 'date'
+    type: 'video'
+, 10000
+
+Vue.component 'video-list',
+  template: '#video-list'
+
+  props: [ 'channelId', 'count' ]
+
+  data: ->
+    videos: []
+    watched: {}
+
+  mounted: ->
+    @videos = await getVideosInChannel @channelId, @count
+
 app = new Vue
   el: '#app'
   template:'#app'
@@ -9,7 +30,7 @@ app = new Vue
     headers: [
       { value: 'index', text: 'Order', sort: @sortIndex, width: 5 }
       { value: 'title', text: 'Channel Name' }
-      { value: 'totalItemCount', text: 'Item Count' }
+      { value: 'videos', text: 'Videos', sortable: false }
     ]
 
   mixins: [
