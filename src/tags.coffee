@@ -2,16 +2,18 @@ Vue.component 'channel',
   template: '#channel'
   props: [
     'channelId'
-    'title'
   ]
   data: ->
-    newTag: ''
+    title: ''
     tags: []
-  mounted: ->
+    newTag: ''
+  created: ->
+    @title = @$root.channels
+      .find (c) => c.channelId is @channelId
+      .title
     @tags = @$root.tags[@channelId]
   methods:
     addTag: (t) ->
-      @tags.push @newTag
       @$root.tags[@channelId].push @newTag
       @$root.writeStorage()
       @newTag = ''

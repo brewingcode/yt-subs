@@ -26,24 +26,24 @@ html
       v-container(fluid v-if="channels.length")
         v-alert(type="success") {{ channels.length }} channels found
 
-      channel(v-if="channels.length"
-              v-for="c in channels"
-              :key="c.channelId"
-              v-bind="c")
+        channel(v-if="channels.length"
+                v-for="c in channels"
+                :key="c.channelId"
+                :channelId="c.channelId")
 
     script#channel(type="text/x-template")
-      v-container(fluid)
-        v-layout(row wrap mx-0)
-          v-flex(xs12 md3)
-            v-layout(row nowrap)
-              v-flex(xs12 sm8) {{ title }}
-              v-flex(xs12 sm4)
-                v-text-field(style="width:12ex"
-                             v-model="newTag"
-                             @keydown.enter="addTag"
-                             prepend-inner-icon="mdi-plus-circle")
-          v-flex(xs12 md9)
-            v-chip(v-for="t in tags" :key="t") {{ t }}
+      v-row(dense align-content="start")
+        v-col(cols="12" sm="4")
+          v-row(dense align-content="center")
+            v-col(cols="8")
+              span {{ title }}
+            v-col(cols="4")
+              v-text-field(style="width:12ex"
+                           v-model="newTag"
+                           @keydown.enter="addTag"
+                           prepend-inner-icon="mdi-plus-circle")
+        v-col(cols="12" sm="8")
+          v-chip(pill v-for="t in tags" :key="t") {{ t }}
 
     :inject(file="gapi.js")
     :inject(file="vue-dev.js")
