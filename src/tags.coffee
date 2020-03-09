@@ -4,11 +4,11 @@ Vue.component 'channel',
     'channel'
   ]
   data: ->
-    newTag: ''
-  methods:
-    addTag: ->
+    newTag: null
+  watch:
+    newTag: ->
       @$root.addTag(@channel.channelId, @newTag)
-      @newTag = ''
+      @$nextTick => @newTag = null
 
 app = new Vue
   el: '#app'
@@ -24,6 +24,16 @@ app = new Vue
   created: ->
     await @signIn()
     @readStorage()
+
+  computed:
+    allTags: ->
+      _(@tags)
+        .values()
+        .flattenDeep()
+        .union()
+        .uniq()
+        .sortBy (t) -> t.toLowerCase()
+        .value()
 
   methods:
     getChannels: ->
@@ -50,6 +60,6 @@ app = new Vue
         tags: @tags
 
     addTag: (channelId, newTag) ->
-      if not @tags[channelId].find (t) -> t is newTag
+      if newTag and not @tags[channelId].find (t) -> t is newTag
         @tags[channelId].push newTag
       @writeStorage()

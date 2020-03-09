@@ -38,10 +38,11 @@ html
             v-col(cols="8")
               a(:href="'https://youtube.com/channel/' + channel.channelId" target="_blank") {{ channel.title }}
             v-col(cols="4")
-              v-text-field(style="width:12ex"
-                           v-model="newTag"
-                           @keydown.enter="addTag"
-                           prepend-inner-icon="mdi-plus-circle")
+              v-autocomplete(style="width:15ex"
+                             :items="$root.allTags"
+                             v-model="newTag"
+                             prepend-inner-icon="mdi-plus-circle"
+                             dense)
         v-col(cols="12" sm="8")
           v-chip(v-for="t in $root.tags[channel.channelId]" :key="t") {{ t }}
 
