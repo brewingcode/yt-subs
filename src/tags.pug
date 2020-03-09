@@ -36,7 +36,7 @@ html
         v-col(cols="12" sm="4")
           v-row(dense align-content="center")
             v-col(cols="8")
-              span {{ title }}
+              a(:href="'https://youtube.com/channel/' + channelId" target="_blank") {{ title }}
             v-col(cols="4")
               v-text-field(style="width:12ex"
                            v-model="newTag"
