@@ -1,3 +1,5 @@
+Vue.use VueYouTubeEmbed
+
 Vue.component 'channel',
   template: '#channel'
   props: [ 'channel' ]
@@ -10,17 +12,21 @@ Vue.component 'channel',
 
 Vue.component 'videos',
   template: '#videos'
+
   props: [ 'tag' ]
+
   data: ->
     channels: []
     videos: []
+
   created: ->
-    @channels = @$root.tags
+    @channels = _(@$root.tags)
       .map (tags, channelId) =>
         if tags.includes(@tag) then channelId else null
       .filter Boolean
       .map (id) =>
-        @$root.channels[id]
+        @$root.channels.find (c) -> c.channelId is id
+      .value()
     
     for c in @channels
       resp = await @$root.apiRequest 'GET', "/youtube/v3/activities?channelId=#{c.channelId}",
@@ -29,14 +35,37 @@ Vue.component 'videos',
 
       vids = resp.items
         .filter (a) -> a.snippet.type is 'upload'
-        .map (a) ->
+        .map (a) =>
+          videoId = a.contentDetails.upload.videoId
           return {
             ..._.pick a.snippet, ['publishedAt', 'title']
-            videoId: a.contentDetails.upload.videoId
+            videoId: videoId
             showing: false
+            watched: @$root.watched[videoId]?
           }
+        .filter (v) -> not v.watched
+        .slice 0, 5
 
-      @videos.push vids
+      @videos.push ...vids
+
+  computed:
+    filteredVideos: ->
+      _(@videos)
+        .filter (v) =>
+          not v.watched
+        .sortBy ['publishedAt']
+        .reverse()
+        .value()
+
+  methods:
+    markWatched: (video) ->
+      @$root.markWatched(video)
+      video.watched = true
+      video.showing = false
+
+  filters:
+    dateNice: (d) -> moment(d).format('ddd MMM D h:mma')
+    dateHuman: (d) -> moment(d).fromNow()      
 
 app = new Vue
   el: '#app'
@@ -84,7 +113,7 @@ app = new Vue
       try
         state = JSON.parse localStorage.getItem 'yt-subs'
         @tags = state.tags if _.size(state.tags)
-        @watched = stage.watched if _.size(state.watched)
+        @watched = state.watched if _.size(state.watched)
 
     writeStorage: ->
       localStorage.setItem 'yt-subs', JSON.stringify
@@ -94,4 +123,8 @@ app = new Vue
     addTag: (channelId, newTag) ->
       if newTag and not @tags[channelId].find (t) -> t is newTag
         @tags[channelId].push newTag
+      @writeStorage()
+
+    markWatched: (video) ->
+      @watched[video.videoId] = 1
       @writeStorage()
