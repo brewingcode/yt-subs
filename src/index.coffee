@@ -21,6 +21,7 @@ Vue.component 'videos',
     channels: []
     videos: []
     videosPerChannel: 5
+    players: []
 
   created: ->
     @channels = _(@$root.tags)
@@ -75,6 +76,16 @@ Vue.component 'videos',
       @$root.markWatched(video)
       video.watched = true
       video.showing = false
+
+    playerReady: (e) ->
+      @players.push e.target
+
+    dismissed: -> 
+      @players.forEach (p) -> p.pauseVideo()
+
+    stop: (v) ->
+      v.showing = false
+      @players.forEach (p) -> p.pauseVideo()
 
   filters:
     dateNice: (d) -> moment(d).format('ddd MMM D h:mma')

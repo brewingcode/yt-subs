@@ -80,12 +80,12 @@ html
             a(@click.stop="v.showing = true") {{ v.title }}
             span(v-text="' | '")
             span {{ v.publishedAt | dateNice }} ({{ v.publishedAt | dateHuman }})
-            v-dialog(v-model="v.showing")
+            v-dialog(v-model="v.showing" @click:outside="dismissed")
               div(style="text-align:center")
-                youtube(:video-id="v.videoId" :player-vars="{ autoplay:1 }")
+                youtube(:video-id="v.videoId" :player-vars="{ autoplay:1 }" @ready="playerReady")
                 div
                   v-btn(@click="markWatched(v)") Mark as Watched
-                  v-btn(@click="v.showing = false") Close             
+                  v-btn(@click="stop(v)") Close             
 
     :inject(file="gapi.js")
     :inject(file="vue-prod.js")
