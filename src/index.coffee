@@ -109,7 +109,7 @@ app = new Vue
 
       @channels = resp.items.map (item, index) =>
         channelId = item.snippet.resourceId.channelId # NOT item.snippet.channelId
-        @tags[channelId] = [] unless @tags[channelId]
+        @$set(@tags, channelId, []) unless @tags[channelId]
         return {
           ..._.pick item.snippet, ['title', 'publishedAt']
           channelId
@@ -118,7 +118,9 @@ app = new Vue
     readStorage: ->
       try
         state = JSON.parse localStorage.getItem 'yt-subs'
-        @tags = state.tags if _.size(state.tags)
+        if _.size(state.tags)
+          for k,v of state.tags
+            @$set @tags, k, v
         if _.size(state.watched)
           @watched = _.fromPairs _.map(state.watched, (id) -> [id, 1])
 
@@ -129,11 +131,14 @@ app = new Vue
 
     addTag: (channelId, newTag) ->
       if newTag and not @tags[channelId].find (t) -> t is newTag
-        @tags[channelId].push newTag
+        tags = @tags[channelId]
+        tags.push newTag
+        @$set @tags, channelId, tags
       @writeStorage()
 
     removeTag: (channelId, tag) ->
-      @tags[channelId] = @tags[channelId].filter (t) -> t isnt tag
+      tags = @tags[channelId].filter (t) -> t isnt tag
+      @$set @tags, channelId, tags
       @writeStorage()
 
     markWatched: (video) ->
