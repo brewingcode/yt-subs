@@ -9,7 +9,8 @@ html
     :inject(file="vuetify.css")
     style.
       .v-text-field { padding-top: 0; margin-top: 0; }
-      .v-input__slot { margin-bottom: 0; }
+      .v-input__slot { margin-bottom: 0; min-height: 0 !important; text-align: right; }
+
   body
     script#app(type="text/x-template"): v-app
       v-container(fluid v-if="auth")
@@ -57,9 +58,20 @@ html
     script#videos(type="text/x-template")
       div
         div(:style="centerOnSmall")
-          div Viewing <code>{{ tag }}</code> tag on channels:
+          div Viewing <code>{{ tag }}</code> tag on {{ channels.length }} channels:
           div(v-for="c in channels" :key="c.channelId") {{ c.title }}
-        v-row(dense v-for="v in filteredVideos" :key="v.videoId" align-content="start" :style="centerOnSmall")
+          v-row(dense :style="centerOnSmall")
+            v-col(cols="12" sm="auto") Videos per channel to show:
+            v-col(cols="6" sm="1")
+              v-text-field(v-model="videosPerChannel" dense outlined)
+            v-col(cols="6" sm="3")
+              v-slider(v-model="videosPerChannel" dense min="1" max="10")
+        v-row(dense
+              :wrap="$vuetify.breakpoint.smAndDown"
+              v-for="v in filteredVideos"
+              :key="v.videoId"
+              align-content="start"
+              :style="centerOnSmall")
           v-col(cols="12" sm="auto")
             v-img(v-if="$vuetify.breakpoint.smAndDown" :src="v.bigthumb.url" :width="v.bigthumb.width" :height="v.bigthumb.height")
             v-img(v-else :src="v.smallthumb.url" :width="v.smallthumb.width" :height="v.smallthumb.height")

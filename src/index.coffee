@@ -20,6 +20,7 @@ Vue.component 'videos',
   data: ->
     channels: []
     videos: []
+    videosPerChannel: 5
 
   created: ->
     @channels = _(@$root.tags)
@@ -60,11 +61,11 @@ Vue.component 'videos',
       perChannel = {}
 
       _(@videos)
-        .filter (v) =>
-          not v.watched
         .filter (v) ->
+          not v.watched
+        .filter (v) =>
           perChannel[v.channelId] ||= 0
-          perChannel[v.channelId]++ <= 5
+          perChannel[v.channelId]++ < @videosPerChannel
         .sortBy ['publishedAt']
         .reverse()
         .value()
