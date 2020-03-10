@@ -10,6 +10,7 @@ html
     style.
       .v-text-field { padding-top: 0; margin-top: 0; }
       .v-input__slot { margin-bottom: 0; min-height: 0 !important; text-align: right; }
+      .thumb { cursor: pointer }
 
   body
     script#app(type="text/x-template"): v-app
@@ -72,9 +73,9 @@ html
               :key="v.videoId"
               align-content="start"
               :style="centerOnSmall")
-          v-col(cols="12" sm="auto")
-            v-img(v-if="$vuetify.breakpoint.smAndDown" :src="v.bigthumb.url" :width="v.bigthumb.width" :height="v.bigthumb.height")
-            v-img(v-else :src="v.smallthumb.url" :width="v.smallthumb.width" :height="v.smallthumb.height")
+          v-col.thumb(cols="12" sm="auto")
+            v-img(v-if="$vuetify.breakpoint.smAndDown" :src="v.bigthumb.url" :width="v.bigthumb.width" :height="v.bigthumb.height" @click.prevent="v.showing = true")
+            v-img(v-else :src="v.smallthumb.url" :width="v.smallthumb.width" :height="v.smallthumb.height" @click.prevent="v.showing = true")
           v-col(cols="12" sm="auto")
             a(@click.stop="v.showing = true") {{ v.title }}
             span(v-text="' | '")
