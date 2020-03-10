@@ -50,7 +50,8 @@ html
           v-chip(v-for="t in $root.tags[channel.channelId]"
                  :key="t"
                  @click="$root.viewTag = t"
-                 v-text="t")
+                 close
+                 @click:close="$root.removeTag(channel.channelId, t)") {{ t }}
 
     script#videos(type="text/x-template")
       div

@@ -125,6 +125,10 @@ app = new Vue
         @tags[channelId].push newTag
       @writeStorage()
 
+    removeTag: (channelId, tag) ->
+      @tags[channelId] = @tags[channelId].filter (t) -> t isnt tag
+      @writeStorage()
+
     markWatched: (video) ->
       @watched[video.videoId] = 1
       @writeStorage()
