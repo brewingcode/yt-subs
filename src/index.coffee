@@ -42,13 +42,12 @@ Vue.component 'videos',
           return {
             ..._.pick a.snippet, ['publishedAt', 'title']
             videoId: videoId
+            channelId: c.channelId
             showing: false
             watched: @$root.watched[videoId]?
             smallthumb: a.snippet.thumbnails.default
             bigthumb: a.snippet.thumbnails.high
           }
-        .filter (v) -> not v.watched
-        .slice 0, 5
 
       @videos.push ...vids
 
@@ -58,9 +57,14 @@ Vue.component 'videos',
       'justify-content': if @$vuetify.breakpoint.smAndDown then 'center' else 'left'
 
     filteredVideos: ->
+      perChannel = {}
+
       _(@videos)
         .filter (v) =>
           not v.watched
+        .filter (v) ->
+          perChannel[v.channelId] ||= 0
+          perChannel[v.channelId]++ <= 5
         .sortBy ['publishedAt']
         .reverse()
         .value()
