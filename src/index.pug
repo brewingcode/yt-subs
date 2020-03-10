@@ -82,7 +82,7 @@ html
             span {{ v.publishedAt | dateNice }} ({{ v.publishedAt | dateHuman }})
             v-dialog(v-model="v.showing")
               div(style="text-align:center")
-                youtube(:video-id="v.videoId")
+                youtube(:video-id="v.videoId" :player-vars="{ autoplay:1 }")
                 div
                   v-btn(@click="markWatched(v)") Mark as Watched
                   v-btn(@click="v.showing = false") Close             
