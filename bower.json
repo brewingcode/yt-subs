@@ -1,7 +1,0 @@
-{
-  "name": "yt-subs",
-  "dependencies": {
-    "seiyria-bootstrap-slider": "~6.0.6",
-    "bootstrap-stylus": "^5.0.7"
-  }
-}

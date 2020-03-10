@@ -1,0 +1,83 @@
+doctype html
+html
+  head
+    title YourTube
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    :inject(file="md-icons.css")
+    :inject(file="vuetify.css")
+    style.
+      .v-text-field { padding-top: 0; margin-top: 0; }
+      .v-input__slot { margin-bottom: 0; }
+  body
+    script#app(type="text/x-template"): v-app
+      v-container(fluid v-if="auth")
+        template(v-if="authorized")
+          v-btn(@click="signOut") Sign out
+          v-btn(@click="revoke") De-authorize
+          span &nbsp;You are currently signed in as {{ email }}
+        template(v-else)
+          v-btn(@click="signIn") Sign In/Re-authorize
+
+      v-container(fluid v-if="gerror")
+        v-alert(type="danger") {{ gerror}}
+
+      v-container(fluid v-if="viewTag")
+        v-row: v-col: v-btn(@click="viewTag = null") Back to subscriptions
+        videos(:tag="viewTag")
+
+      v-container(fluid v-else-if="channels.length")
+        v-alert(type="success") {{ channels.length }} channels found
+        channel(v-if="channels.length"
+                v-for="c in channels"
+                :key="c.channelId"
+                :channel="c")
+
+    script#channel(type="text/x-template")
+      v-row(dense align-content="start")
+        v-col(cols="12" sm="4")
+          v-row(dense align-content="center")
+            v-col(cols="8")
+              a(:href="'https://youtube.com/channel/' + channel.channelId" target="_blank") {{ channel.title }}
+            v-col(cols="4")
+              v-combobox(style="width:15ex"
+                         :items="$root.allTags"
+                         v-model="newTag"
+                         prepend-inner-icon="mdi-plus-circle"
+                         dense)
+        v-col(cols="12" sm="8")
+          v-chip(v-for="t in $root.tags[channel.channelId]"
+                 :key="t"
+                 @click="$root.viewTag = t"
+                 close
+                 @click:close="$root.removeTag(channel.channelId, t)") {{ t }}
+
+    script#videos(type="text/x-template")
+      div
+        div(:style="centerOnSmall")
+          div Viewing <code>{{ tag }}</code> tag on channels:
+          div(v-for="c in channels" :key="c.channelId") {{ c.title }}
+        v-row(dense v-for="v in filteredVideos" :key="v.videoId" align-content="start" :style="centerOnSmall")
+          v-col(cols="12" sm="auto")
+            v-img(v-if="$vuetify.breakpoint.smAndDown" :src="v.bigthumb.url" :width="v.bigthumb.width" :height="v.bigthumb.height")
+            v-img(v-else :src="v.smallthumb.url" :width="v.smallthumb.width" :height="v.smallthumb.height")
+          v-col(cols="12" sm="auto")
+            a(@click.stop="v.showing = true") {{ v.title }}
+            span(v-text="' | '")
+            span {{ v.publishedAt | dateNice }} ({{ v.publishedAt | dateHuman }})
+            v-dialog(v-model="v.showing")
+              div(style="text-align:center")
+                youtube(:video-id="v.videoId")
+                div
+                  v-btn(@click="markWatched(v)") Mark as Watched
+                  v-btn(@click="v.showing = false") Close             
+
+    :inject(file="gapi.js")
+    :inject(file="vue-dev.js")
+    :inject(file="vuetify.js")
+    :inject(file="google-api.coffee")
+    :inject(file="lodash.js")
+    :inject(file="vue-youtube-embed.js")
+    :inject(file="moment.js")
+    :inject(file="index.coffee" bare)
