@@ -55,25 +55,23 @@ html
 
     script#videos(type="text/x-template")
       div
-        v-row: v-col
-          span Viewing <code>{{ tag }}</code> tag on channels:
-          ul
-            li(v-for="c in channels" :key="c.channelId") {{ c.title }}
-        v-row(v-for="v in filteredVideos" :key="v.videoId" align-content="start")
-          v-col
-            v-row(align-content="start" no-gutters row wrap)
-              v-col(sm="4")
-                v-img(:src="v.thumbnail.url" :width="v.thumbnail.width" :height="v.thumbnail.height")
-              v-col(sm="8")
-                a(@click.stop="v.showing = true") {{ v.title }}
-                v-dialog(v-model="v.showing")
-                  div(style="text-align:center")
-                    youtube(:video-id="v.videoId")
-                    div
-                      v-btn(@click="markWatched(v)") Mark as Watched
-                      v-btn(@click="v.showing = false") Close             
-          v-col
+        div(:style="centerOnSmall")
+          div Viewing <code>{{ tag }}</code> tag on channels:
+          div(v-for="c in channels" :key="c.channelId") {{ c.title }}
+        v-row(dense v-for="v in filteredVideos" :key="v.videoId" align-content="start" :style="centerOnSmall")
+          v-col(cols="12" sm="auto")
+            v-img(v-if="$vuetify.breakpoint.smAndDown" :src="v.bigthumb.url" :width="v.bigthumb.width" :height="v.bigthumb.height")
+            v-img(v-else :src="v.smallthumb.url" :width="v.smallthumb.width" :height="v.smallthumb.height")
+          v-col(cols="12" sm="auto")
+            a(@click.stop="v.showing = true") {{ v.title }}
+            span(v-text="' | '")
             span {{ v.publishedAt | dateNice }} ({{ v.publishedAt | dateHuman }})
+            v-dialog(v-model="v.showing")
+              div(style="text-align:center")
+                youtube(:video-id="v.videoId")
+                div
+                  v-btn(@click="markWatched(v)") Mark as Watched
+                  v-btn(@click="v.showing = false") Close             
 
     :inject(file="gapi.js")
     :inject(file="vue-dev.js")

@@ -42,7 +42,8 @@ Vue.component 'videos',
             videoId: videoId
             showing: false
             watched: @$root.watched[videoId]?
-            thumbnail: a.snippet.thumbnails.default
+            smallthumb: a.snippet.thumbnails.default
+            bigthumb: a.snippet.thumbnails.high
           }
         .filter (v) -> not v.watched
         .slice 0, 5
@@ -50,6 +51,10 @@ Vue.component 'videos',
       @videos.push ...vids
 
   computed:
+    centerOnSmall: ->
+      'text-align': if @$vuetify.breakpoint.smAndDown then 'center' else 'inherit'
+      'justify-content': if @$vuetify.breakpoint.smAndDown then 'center' else 'left'
+
     filteredVideos: ->
       _(@videos)
         .filter (v) =>
