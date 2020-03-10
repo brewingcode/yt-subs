@@ -8,7 +8,9 @@ Vue.component 'channel',
   watch:
     newTag: ->
       @$root.addTag(@channel.channelId, @newTag)
-      @$nextTick => @newTag = null
+      @$nextTick =>
+        @newTag = null
+        @$refs.combobox.blur()
 
 Vue.component 'videos',
   template: '#videos'
