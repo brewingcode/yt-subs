@@ -113,12 +113,13 @@ app = new Vue
       try
         state = JSON.parse localStorage.getItem 'yt-subs'
         @tags = state.tags if _.size(state.tags)
-        @watched = state.watched if _.size(state.watched)
+        if _.size(state.watched)
+          @watched = _.fromPairs _.map(state.watched, (id) -> [id, 1])
 
     writeStorage: ->
       localStorage.setItem 'yt-subs', JSON.stringify
         tags: @tags
-        watched: @watched
+        watched: _.keys @watched
 
     addTag: (channelId, newTag) ->
       if newTag and not @tags[channelId].find (t) -> t is newTag
