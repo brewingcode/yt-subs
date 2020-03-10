@@ -42,6 +42,7 @@ Vue.component 'videos',
             videoId: videoId
             showing: false
             watched: @$root.watched[videoId]?
+            thumbnail: a.snippet.thumbnails.default
           }
         .filter (v) -> not v.watched
         .slice 0, 5

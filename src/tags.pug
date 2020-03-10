@@ -57,7 +57,12 @@ html
       div
         v-row(v-for="v in filteredVideos" :key="v.videoId")
           v-col
-            a(@click.stop="v.showing = true") {{ v.title }}
+            v-row
+              v-col
+                v-img(:src="v.thumbnail.url" :width="v.thumbnail.width" :height="v.thumbnail.height")
+              v-col
+                a(@click.stop="v.showing = true") {{ v.title }}
+          v-col
             v-dialog(v-model="v.showing")
               div(style="text-align:center")
                 youtube(:video-id="v.videoId")
