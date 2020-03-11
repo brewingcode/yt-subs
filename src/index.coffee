@@ -20,7 +20,6 @@ Vue.component 'videos',
   data: ->
     channels: []
     videos: []
-    videosPerChannel: 5
     players: []
 
   created: ->
@@ -66,7 +65,7 @@ Vue.component 'videos',
           not v.watched
         .filter (v) =>
           perChannel[v.channelId] ||= 0
-          perChannel[v.channelId]++ < @videosPerChannel
+          perChannel[v.channelId]++ < @$root.videosPerChannel
         .sortBy ['publishedAt']
         .reverse()
         .value()
@@ -101,6 +100,7 @@ app = new Vue
     tags: {}
     viewTag: null
     watched: {}
+    videosPerChannel: 5
 
   mixins: [ window.goog ]
 
@@ -141,11 +141,14 @@ app = new Vue
             @$set @tags, k, v
         if _.size(state.watched)
           @watched = _.fromPairs _.map(state.watched, (id) -> [id, 1])
+        if state.videosPerChannel
+          @videosPerChannel = +state.videosPerChannel
 
     writeStorage: ->
       localStorage.setItem 'yt-subs', JSON.stringify
         tags: @tags
         watched: _.keys @watched
+        videosPerChannel: @videosPerChannel
 
     addTag: (channelId, newTag) ->
       if newTag and not @tags[channelId].find (t) -> t is newTag
