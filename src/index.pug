@@ -79,7 +79,8 @@ html
           v-col(cols="12" sm="auto")
             a(@click.stop="v.showing = true") {{ v.title }}
             span(v-text="' | '")
-            span {{ v.publishedAt | dateNice }} ({{ v.publishedAt | dateHuman }})
+            span {{ v.publishedAt | dateNice }} ({{ v.publishedAt | dateHuman }})&nbsp;
+            a(@click.stop="markWatched(v)") [hide]
             v-dialog(v-model="v.showing" @click:outside="dismissed")
               div(style="text-align:center")
                 youtube(:video-id="v.videoId" :player-vars="{ autoplay:1 }" @ready="playerReady")
