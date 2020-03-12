@@ -108,6 +108,10 @@ app = new Vue
     await @signIn()
     @readStorage()
 
+  watch:
+    daysToShow: ->
+      @writeStorage()
+
   computed:
     allTags: ->
       _(@tags)
