@@ -62,11 +62,11 @@ html
           div Viewing <code>{{ tag }}</code> tag on {{ channels.length }} channels:
           div(v-for="c in channels" :key="c.channelId") {{ c.title }}
           v-row(dense :style="centerOnSmall")
-            v-col(cols="12" sm="auto") Videos per channel to show:
+            v-col(cols="12" sm="auto") Show videos from previous days:
             v-col(cols="6" sm="1")
-              v-text-field(v-model="$root.videosPerChannel" dense outlined)
+              v-text-field(v-model="$root.daysToShow" dense outlined)
             v-col(cols="6" sm="3")
-              v-slider(v-model="$root.videosPerChannel" dense min="1" max="10")
+              v-slider(v-model="$root.daysToShow" dense min="1" max="10")
         v-row(dense
               :wrap="$vuetify.breakpoint.smAndDown"
               v-for="v in filteredVideos"

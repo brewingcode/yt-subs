@@ -58,14 +58,11 @@ Vue.component 'videos',
       'justify-content': if @$vuetify.breakpoint.smAndDown then 'center' else 'left'
 
     filteredVideos: ->
-      perChannel = {}
-
       _(@videos)
         .filter (v) ->
           not v.watched
         .filter (v) =>
-          perChannel[v.channelId] ||= 0
-          perChannel[v.channelId]++ < @$root.videosPerChannel
+          moment().diff(v.publishedAt, 'days') < @$root.daysToShow
         .sortBy ['publishedAt']
         .reverse()
         .value()
@@ -100,7 +97,7 @@ app = new Vue
     tags: {}
     viewTag: null
     watched: {}
-    videosPerChannel: 5
+    daysToShow: 5
 
   mixins: [ window.goog ]
 
@@ -146,14 +143,14 @@ app = new Vue
             @$set @tags, k, v
         if _.size(state.watched)
           @watched = _.fromPairs _.map(state.watched, (id) -> [id, 1])
-        if state.videosPerChannel
-          @videosPerChannel = +state.videosPerChannel
+        if state.daysToShow
+          @daysToShow = +state.daysToShow
 
     writeStorage: ->
       localStorage.setItem 'yt-subs', JSON.stringify
         tags: @tags
         watched: _.keys @watched
-        videosPerChannel: @videosPerChannel
+        daysToShow: @daysToShow
 
     addTag: (channelId, newTag) ->
       if newTag and not @tags[channelId].find (t) -> t is newTag
