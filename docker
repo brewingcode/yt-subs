@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+tag=yt-subs
+docker build -t "$tag" .
+docker stop "$tag"
+docker rm "$tag"
+docker run --name "$tag"     \
+  -v "$(pwd)":/app           \
+  -p 3000:3000               \
+  -d                         \
+  --restart unless-stopped   \
+  "$tag:latest"
