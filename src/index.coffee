@@ -124,6 +124,7 @@ app = new Vue
         mine: true
         part: 'snippet'
         maxResults: 50
+        order: 'unread'
 
       @channels = resp.items.map (item, index) =>
         channelId = item.snippet.resourceId.channelId # NOT item.snippet.channelId
