@@ -1,11 +1,13 @@
 FROM mhart/alpine-node:10
 
-RUN apk add --no-cache --update tzdata yarn
+RUN apk add --no-cache --update tzdata yarn git
 
 WORKDIR /app
-COPY package.json yarn.lock server.coffee ./
+COPY package.json yarn.lock ./
+RUN yarn --ignore-engines
 COPY src ./src
-RUN yarn && yarn build
+COPY server.coffee ./
+RUN yarn build
 
 ENV TZ=America/Los_Angeles
 EXPOSE 5000

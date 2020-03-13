@@ -21,7 +21,6 @@ checkCors = cors
       cb new Error 'Not allowed by cors'
 
 app.post '/state', express.json(), checkCors, (req, res) ->
-  console.log req.body
   { gid } = req.body
   if req.body?.set
     fs.writeFileSync "#{dataDir}/#{gid}.json", JSON.stringify req.body.set
