@@ -143,8 +143,10 @@ app = new Vue
           if serverState.server
             state = serverState
 
-      if not state
+      if not _.size(state)
         state = JSON.parse localStorage.getItem 'yt-subs'
+
+      return unless _.size(state)
 
       if _.size(state.tags)
         for k,v of state.tags
