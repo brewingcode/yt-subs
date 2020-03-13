@@ -33,7 +33,10 @@ app.post '/state', express.json(), checkCors, (req, res) ->
     fs.writeFileSync "#{dataDir}/#{gid}.json", JSON.stringify req.body.set
     res.send {}
   else
-    res.send JSON.parse fs.readFileSync "#{dataDir}/#{gid}.json"
+    try
+      res.send JSON.parse fs.readFileSync "#{dataDir}/#{gid}.json"
+    catch e
+      res.send {}
 
 server = http.createServer(app)
 server.listen port, host, ->
