@@ -3,6 +3,8 @@ window.goog =
     auth: null
     authorized: false
     gerror: null
+    email: null
+    gid: null
     scope: 'https://www.googleapis.com/auth/youtube.readonly'
 
   created: ->
@@ -46,6 +48,7 @@ window.goog =
     setSigninStatus: (isSignedIn) ->
       user = @auth.currentUser.get()
       @authorized = user?.hasGrantedScopes @scope
+      @gid = user?.getBasicProfile()?.getId()
       @email = user?.getBasicProfile()?.getEmail()
       if @email
         @getChannels()
