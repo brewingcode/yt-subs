@@ -10,6 +10,5 @@ COPY server.coffee ./
 RUN yarn build
 
 ENV TZ=America/Los_Angeles
-EXPOSE 5000
 ENV HOST 0.0.0.0
 CMD ["./node_modules/.bin/coffee", "server.coffee"]

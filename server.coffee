@@ -13,12 +13,19 @@ if not fs.existsSync dataDir
 
 app.use express.static 'dist'
 
-checkCors = cors
-  origin: (origin, cb) ->
-    if ['http://localhost:3000', 'https://yt.brewingcode.net'].includes origin
-      cb null, true
-    else
-      cb new Error 'Not allowed by cors'
+checkCors = do ->
+  origins = [
+    'http://localhost:3000'
+    'http://localhost:3002'
+    'https://yt.brewingcode.net'
+  ]
+
+  return cors
+    origin: (origin, cb) ->
+      if origins.includes origin
+        cb null, true
+      else
+        cb new Error 'Not allowed by cors'
 
 app.post '/state', express.json(), checkCors, (req, res) ->
   { gid } = req.body
