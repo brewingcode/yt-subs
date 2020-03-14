@@ -46,7 +46,7 @@ Vue.component 'videos',
             channelId: c.channelId
             showing: false
             watched: @$root.watched[videoId]?
-            smallthumb: a.snippet.thumbnails.default
+            smallthumb: a.snippet.thumbnails.medium
             bigthumb: a.snippet.thumbnails.high
           }
 

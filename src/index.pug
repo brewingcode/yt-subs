@@ -10,7 +10,8 @@ html
     style.
       .v-text-field { padding-top: 0; margin-top: 0; }
       .v-input__slot { margin-bottom: 0; min-height: 0 !important; text-align: right; }
-      .thumb { cursor: pointer }
+      .v-image { cursor: pointer }
+      .v-card-subtitle { margin-bottom: -32px !important; }
 
   body
     script#app(type="text/x-template"): v-app
@@ -67,26 +68,22 @@ html
               v-text-field(v-model="$root.daysToShow" dense outlined)
             v-col(cols="6" sm="3")
               v-slider(v-model="$root.daysToShow" dense min="1" max="10")
-        v-row(dense
-              :wrap="$vuetify.breakpoint.smAndDown"
-              v-for="v in filteredVideos"
-              :key="v.videoId"
-              align-content="start"
-              :style="centerOnSmall")
-          v-col.thumb(cols="12" sm="auto")
-            v-img(v-if="$vuetify.breakpoint.smAndDown" :src="v.bigthumb.url" :width="v.bigthumb.width" :height="v.bigthumb.height" @click.prevent="v.showing = true")
-            v-img(v-else :src="v.smallthumb.url" :width="v.smallthumb.width" :height="v.smallthumb.height" @click.prevent="v.showing = true")
-          v-col(cols="12" sm="auto")
-            a(@click.stop="v.showing = true") {{ v.title }}
-            span(v-text="' | '")
-            span {{ v.publishedAt | dateNice }} ({{ v.publishedAt | dateHuman }})&nbsp;
-            a(@click.stop="markWatched(v)") [hide]
-            v-dialog(v-model="v.showing" @click:outside="dismissed")
-              div(style="text-align:center")
-                youtube(:video-id="v.videoId" :player-vars="{ autoplay:1 }" @ready="playerReady")
-                div
-                  v-btn(@click="markWatched(v)") Mark as Watched
-                  v-btn(@click="stop(v)") Close             
+        v-row(dense row wrap justify="center" align="stretch")
+          v-col(cols="12" sm="6" md="4" lg="3" v-for="v in filteredVideos" :key="v.videoId")
+            v-card(height="100%")
+              v-img(v-if="$vuetify.breakpoint.smAndDown" contain :src="v.bigthumb.url" :max-height="v.bigthumb.height" @click.prevent="v.showing = true")
+              v-img(v-else contain :src="v.smallthumb.url" :max-height="v.smallthumb.height" @click.prevent="v.showing = true")
+              v-card-title: a(@click.stop="v.showing = true") {{ v.title }}
+              v-card-subtitle.py-0 {{ v.publishedAt | dateNice }}
+              v-card-subtitle.py-0 {{ v.publishedAt | dateHuman }}
+              v-card-actions
+                v-btn(text @click.stop="markWatched(v)") [hide]
+              v-dialog(v-model="v.showing" @click:outside="dismissed")
+                div(style="text-align:center")
+                  youtube(:video-id="v.videoId" :player-vars="{ autoplay:1 }" @ready="playerReady")
+                  div
+                    v-btn(@click="markWatched(v)") Mark as Watched
+                    v-btn(@click="stop(v)") Close
 
     :inject(file="gapi.js")
     :inject(file="vue-dev.js")
