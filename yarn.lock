@@ -2222,10 +2222,10 @@ pug-load@^2.0.12:
     object-assign "^4.1.0"
     pug-walk "^1.1.8"
 
-pug-pack@^1.9.3:
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/pug-pack/-/pug-pack-1.9.3.tgz#751fc4e101140847a52dd8683c110406a5c0e2e0"
-  integrity sha512-TjljCYDNv740VdD1OzO9q7Y5CPrqtfFORiOUdaExV0FTwTdj8sHaIyuc+61Tn1cB22qfoOQJhDrOl9xkvACK8g==
+pug-pack@^1.9.4:
+  version "1.9.4"
+  resolved "https://registry.yarnpkg.com/pug-pack/-/pug-pack-1.9.4.tgz#17d0c0bf9a37bdafe8035a9e2b13e67f6d6d49ca"
+  integrity sha512-S4ruSdcpnYdyvT+o5PIH+PGCI7lU2R5NzQuXiOoa7thrRl5zL1B4pkgRJ9Zy8UX9SGA19BoCuAmSLL1tupJMZg==
   dependencies:
     bluebird "^3.7.2"
     browser-sync "^2.26.7"
