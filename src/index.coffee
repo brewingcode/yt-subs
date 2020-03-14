@@ -139,9 +139,9 @@ app = new Vue
     readStorage: ->
       if @gid
         try
-          serverState = await axios.post '/state', gid: @gid
-          if serverState.server
-            state = serverState
+          { data } = await axios.post '/state', gid: @gid
+          if data.server
+            state = data
 
       if not _.size(state)
         state = JSON.parse localStorage.getItem 'yt-subs'
