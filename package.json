@@ -5,7 +5,10 @@
   "author": "Alex",
   "private": true,
   "dependencies": {
-    "pug-pack": "^1.9.2"
+    "coffeescript": "^2.5.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "pug-pack": "^1.9.4"
   },
   "scripts": {
     "dev": "pug-pack --watch",

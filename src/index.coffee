@@ -46,7 +46,7 @@ Vue.component 'videos',
             channelId: c.channelId
             showing: false
             watched: @$root.watched[videoId]?
-            smallthumb: a.snippet.thumbnails.default
+            smallthumb: a.snippet.thumbnails.medium
             bigthumb: a.snippet.thumbnails.high
           }
 
@@ -103,7 +103,6 @@ app = new Vue
 
   created: ->
     await @signIn()
-    @readStorage()
 
   watch:
     daysToShow: ->
@@ -135,22 +134,39 @@ app = new Vue
           channelId
         }
 
+      await @readStorage()
+
     readStorage: ->
-      try
+      if @gid
+        try
+          { data } = await axios.post '/state', gid: @gid
+          if data.server
+            state = data
+
+      if not _.size(state)
         state = JSON.parse localStorage.getItem 'yt-subs'
-        if _.size(state.tags)
-          for k,v of state.tags
-            @$set @tags, k, v
-        if _.size(state.watched)
-          @watched = _.fromPairs _.map(state.watched, (id) -> [id, 1])
-        if state.daysToShow
-          @daysToShow = +state.daysToShow
+
+      return unless _.size(state)
+
+      if _.size(state.tags)
+        for k,v of state.tags
+          @$set @tags, k, v
+      if _.size(state.watched)
+        @watched = _.fromPairs _.map(state.watched, (id) -> [id, 1])
+      if state.daysToShow
+        @daysToShow = +state.daysToShow
 
     writeStorage: ->
-      localStorage.setItem 'yt-subs', JSON.stringify
+      state =
         tags: @tags
         watched: _.keys @watched
         daysToShow: @daysToShow
+        server: 1
+      try
+        await axios.post '/state', { gid:@gid, set:state }
+        state.server = true
+
+      localStorage.setItem 'yt-subs', JSON.stringify state
 
     addTag: (channelId, newTag) ->
       if newTag and not @tags[channelId].find (t) -> t is newTag
