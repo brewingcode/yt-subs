@@ -7,7 +7,7 @@ docker stop "$tag"
 docker rm "$tag"
 docker run --name "$tag"     \
   -v "$(pwd)/data":/app/data \
-  -p 3002:3000               \
+  -p 127.0.0.1:3002:3000     \
   -d                         \
   --restart unless-stopped   \
   "$tag:latest"
